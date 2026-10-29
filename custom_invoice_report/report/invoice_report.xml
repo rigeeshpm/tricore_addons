@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+      <record id="paperformat_invoice_compact_header" model="report.paperformat">
+        <field name="name">Invoice - Compact Header</field>
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">25</field>
+        <field name="margin_bottom">20</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">20</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <!-- Apply the paper format to the standard invoice report -->
+    <record id="account.account_invoices" model="ir.actions.report">
+        <field name="paperformat_id"
+               ref="custom_invoice_report.paperformat_invoice_compact_header"/>
+    </record>
+    <template id="external_layout_body_inherit" inherit_id="web.external_layout_body">
+<!--        hide default layout title-->
+         <xpath expr="//h2[@t-out='layout_document_title']"
+               position="attributes">
+            <attribute name="t-if">False</attribute>
+        </xpath>
+<!--        add new title-->
+        <xpath expr="//t[@t-if='customized_address_layout']" position="before">
+            <div t-if="o and o._name == 'account.move'">
+                <div class="row-12" style="padding-top:35px;text-align:centre">
+                    <div class="col-12"
+                         style="text-align:center; width:100%; margin:0;">Tax Invoice/فاتورة ضريبية</div>
+                </div>
+                <div class="row-12" style="text-align:left;margin-bottom:0 !important">
+                    <span style="font-size:18px;">Invoice No./رقم الفاتورة :</span><span t-out="layout_document_title"/>
+                </div>
+            </div>
+        </xpath>
+    </template>
+<!--    new address layout-->
+    <template id="custom_address_table"
+              inherit_id="web.address_layout">
+        <!-- Make the address column occupy the full row for customer invoices -->
+        <xpath expr="//t[@t-set='colclass']" position="attributes">
+            <attribute name="t-value">
+                ('col-12' if o and o._name == 'account.move' else
+                (('col-sm-5' if report_type == 'html' else 'col-5') + ' ms-auto'))
+            </attribute>
+        </xpath>
+
+        <!-- Replace the standard customer address with a full-width table -->
+        <xpath expr="//div[@name='address']" position="replace">
+            <t t-set="partner_ar" t-value="o.partner_id.with_context(lang='ar_001')"/>
+            <t t-set="partner_en" t-value="o.partner_id.with_context(lang='en_US')"/>
+            <div name="address"
+                 t-att-class="not custom_layout_address and colclass or information_block and colclass">
+                <t t-if="o and o._name == 'account.move'">
+                    <table class="table table-sm table-bordered"
+                           style="width:100%; max-width:100%; table-layout:fixed;
+                                    border-collapse:collapse; margin:0 !important;
+                                    padding:0 !important; font-size:10pt;">
+                            <colgroup>
+                                <col style="width:12.5%;"/>
+                                <col style="width:12.5%;"/>
+                                <col style="width:12.5%;"/>
+                                <col style="width:12.5%;"/>
+                                <col style="width:12.5%;"/>
+                                <col style="width:12.5%;"/>
+                                <col style="width:12.5%;"/>
+                                <col style="width:12.5%;"/>
+                            </colgroup>
+                        <thead>
+                            <tr>
+                                <th colspan="8"
+                                    style="text-align:left; background:#eeeeee; padding:5px;">
+                                    <p>Tax Invoice</p>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding:4px;">
+                                    Name
+                                </td>
+                                <td colspan="3"
+                                    style="padding:4px; overflow-wrap:anywhere;">
+                                    <span t-out="partner_en.name"/>
+                                </td>
+
+                                <td colspan="3" style="padding:4px; direction:rtl;
+                                           text-align:right; overflow-wrap:anywhere;">
+                                    <span><span t-out="partner_ar.name"/></span>
+                                </td>
+                                <td
+                                    style="padding:4px; direction:rtl;
+                                           text-align:right;">
+                                    اسم
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:4px;">
+                                    Street
+                                </td>
+                                <td style="padding:4px; overflow-wrap:anywhere;">
+                                    <span t-out="partner_en.street"/>
+                                </td>
+                                <td style="padding:4px; overflow-wrap:anywhere;">
+                                   Building No.
+                                </td>
+                                <td style="padding:4px; overflow-wrap:anywhere;">
+                                    <span t-field="partner_en.building_no"/>
+                                </td>
+
+                                <td style="padding:4px; direction:rtl;
+                                           text-align:right; overflow-wrap:anywhere;">
+                                    <span t-field="partner_en.building_no"/>
+                                </td>
+
+                                <td style="padding:4px; direction:rtl;
+                                           text-align:right; overflow-wrap:anywhere;">
+                                    رقم المبنى
+                                </td>
+                                <td style="padding:4px; direction:rtl;
+                                           text-align:right; overflow-wrap:anywhere;">
+                                    <span t-out="partner_ar.street"/>
+                                </td>
+                                <td style="padding:4px; direction:rtl;
+                                           text-align:right; overflow-wrap:anywhere;">
+                                    اسم الشارع
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:4px;">
+                                    Addi No.
+                                </td>
+                                <td style="padding:4px; overflow-wrap:anywhere;">
+                                    <span t-out="partner_en.add_no"/>
+                                </td>
+                                <td style="padding:4px; overflow-wrap:anywhere;">
+                                   City
+                                </td>
+                                <td style="padding:4px; overflow-wrap:anywhere;">
+                                    <span t-out="partner_en.city"/>
+                                </td>
+
+                                <td style="padding:4px; direction:rtl;
+                                           text-align:right; overflow-wrap:anywhere;">
+                                    <span t-out="partner_ar.city"/>
+                                </td>
+
+                                <td style="padding:4px; direction:rtl;
+                                           text-align:right; overflow-wrap:anywhere;">
+                                    مدينة
+                                </td>
+                                <td style="padding:4px; direction:rtl;
+                                           text-align:right; overflow-wrap:anywhere;">
+                                        <span t-out="partner_ar.add_no"/>
+                                </td>
+                                <td style="padding:4px; direction:rtl;
+                                           text-align:right; overflow-wrap:anywhere;">
+                                    رقم إضافي
+                                </td>
+                            </tr>
+<!--                        4th row of the customer address-->
+                            <tr>
+                                <td style="padding:4px;">
+                                    District
+                                </td>
+
+                                <td style="padding:4px; overflow-wrap:anywhere;">
+                                    <span t-out="partner_en.district"/>
+                                </td>
+
+                                <td style="padding:4px; overflow-wrap:anywhere;">
+                                   Zip code
+                                </td>
+
+                                <td style="padding:4px; overflow-wrap:anywhere;">
+                                    <span t-field="o.partner_id.zip"/>
+                                </td>
+
+                                <td style="padding:4px; direction:rtl;
+                                           text-align:right; overflow-wrap:anywhere;">
+                                    <span t-field="o.partner_id.zip"/>
+                                </td>
+
+                                <td style="padding:4px; direction:rtl;
+                                           text-align:right; overflow-wrap:anywhere;">
+                                    الرمز البريدي
+                                </td>
+
+                                <td style="padding:4px; direction:rtl;
+                                           text-align:right; overflow-wrap:anywhere;">
+                                    <span t-out="partner_ar.district"/>
+
+                                </td>
+
+                                <td style="padding:4px; direction:rtl;
+                                           text-align:right; overflow-wrap:anywhere;">
+                                    يصرف
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style=" padding:4px;">
+                                    State
+                                </td>
+                                <td style="padding:4px; overflow-wrap:anywhere;">
+                                    <span t-out="partner_en.state_id.name"/>
+                                </td>
+                                <td style="padding:4px; overflow-wrap:anywhere;">
+                                   Country
+                                </td>
+                                <td style="padding:4px; overflow-wrap:anywhere;">
+                                    <span t-field="partner_en.country_id.name"/>
+                                </td>
+                                <td style="padding:4px; direction:rtl;
+                                           text-align:right; overflow-wrap:anywhere;">
+                                    <span t-out="partner_ar.country_id.name"/>
+                                </td>
+                                <td style="padding:4px; direction:rtl;
+                                           text-align:right; overflow-wrap:anywhere;">
+                                    دولة
+                                </td>
+                                <td style="padding:4px; direction:rtl;
+                                           text-align:right; overflow-wrap:anywhere;">
+                                    <span t-out="partner_ar.state_id.name"/>
+                                </td>
+                                <td style="padding:4px; direction:rtl;
+                                           text-align:right; overflow-wrap:anywhere;">
+                                    ولاية
+                                </td>
+                            </tr>
+                            <!--  6th row of the customer address-->
+                            <tr>
+                                <td style="padding:4px;">
+                                    VAT No.
+                                </td>
+                                <td style="padding:4px; overflow-wrap:anywhere;">
+                                    <span t-field="o.partner_id.vat"/>
+                                </td>
+
+                                <td style="padding:4px; overflow-wrap:anywhere;">
+                                   Region
+                                </td>
+                                <td style="padding:4px; overflow-wrap:anywhere;">
+<!--                                    <span t-out=""/>-->
+                                </td>
+                                <td style="padding:4px; direction:rtl;
+                                           text-align:right; overflow-wrap:anywhere;">
+                                </td>
+                                <td style="padding:4px; direction:rtl;
+                                           text-align:right; overflow-wrap:anywhere;">
+                                    رقم
+                                </td>
+                                <td style="padding:4px; direction:rtl;
+                                           text-align:right; overflow-wrap:anywhere;">
+                                    <span t-field="o.partner_id.vat"/>
+                                </td>
+                                <td style="padding:4px; direction:rtl;
+                                           text-align:right; overflow-wrap:anywhere;">
+                                    رقم ضريبة
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </t>
+                <!-- Preserve the standard address for all other reports -->
+                <t t-else="">
+                    <t t-out="address or None"/>
+                </t>
+            </div>
+        </xpath>
+    </template>
+    <template id="report_invoice_document_inherit"
+              inherit_id="account.report_invoice_document">
+         <xpath expr="//div[@id='informations']" position="attributes">
+            <attribute name="t-if">False</attribute>
+        </xpath>
+        <xpath expr="//div[@id='informations']" position="after">
+            <t t-set="sale_orders" t-value="o.invoice_line_ids.sale_line_ids.order_id"/>
+            <t t-set="pickings" t-value="sale_orders.picking_ids.filtered(lambda p: p.state == 'done')"/>
+            <div class="row"
+                 style="width:100%; margin:0; padding:0;">
+                <table class="table table-sm table-bordered"
+                       style="width:100%; table-layout:fixed;
+                              border-collapse:collapse; font-size:10pt;">
+                    <thead>
+                        <tr>
+                            <th>
+                                <span>تاريخ الفاتورة</span><br/>
+                                <span>Invoice Date</span></th>
+                            <th>Contract / PO No.</th>
+                            <th>Due Date</th>
+                            <th>Payment Terms</th>
+                            <th>L-Delivery Notes</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>
+                                <span t-field="o.invoice_date"/>
+                            </td>
+                            <td>
+                                <t t-if="sale_orders">
+                                    <t t-out="sale_orders[0].client_order_ref"/>
+                                </t>
+                            </td>
+                            <td>
+                                <span t-field="o.invoice_date_due"/>
+                            </td>
+                            <td>
+                                <span t-field="o.invoice_payment_term_id"/>
+                            </td>
+                            <td>
+                                 <t t-if="pickings">
+                                    <t t-out="pickings[0].name"/>
+                                </t>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </xpath>
+         <xpath expr="//table[@name='invoice_line_table']" position="before">
+                <style>
+                    .o_td_quantity {
+                        min-width: 2rem;
+                        max-width: 5rem;
+                    }
+                </style>
+         </xpath>
+        <!-- Remove the table's outer border -->
+        <xpath expr="//table[@name='invoice_line_table']"
+               position="attributes">
+            <attribute name="style"
+                       add="border:none !important; border-collapse:collapse;"
+                       separator=";"/>
+        </xpath>
+
+        <!-- Add borders to every header and data cell -->
+        <xpath expr="//table[@name='invoice_line_table']"
+               position="attributes">
+            <attribute name="class" add="invoice-lines-cell-borders" separator=" "/>
+        </xpath>
+        <xpath expr="//th[@name='th_description']" position="before">
+            <th name="th_si_no"
+                style="width: 7% !important; min-width: 7% !important; max-width: 7% !important; white-space: nowrap;"
+                t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                <span>#</span>
+                <t t-set="line_index" t-value="0"/>
+            </th>
+            <th name="th_name"
+                style="min-width: 200px !important; white-space: nowrap;"
+                t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                <span>Item</span>
+            </th>
+        </xpath>
+        <xpath expr="//td[@name='account_invoice_line_name']" position="before">
+            <td name="si_no" t-att-style="padding_style">
+                <t t-set="line_index" t-value="line_index+1"/>
+                <t t-out="line_index"/>
+            </td>
+            <td name="product_name" style="min-width:200px !important">
+             <span  t-field="line.product_id.name"/>
+            </td>
+        </xpath>
+        <xpath expr="//th[@name='th_quantity']" position="replace">
+            <th name="th_quantity">
+                <span>Qty</span>
+            </th>
+        </xpath>
+        <xpath expr="//th[@name='th_description']" position="after">
+            <th name="th_unit"
+                style="width: 7% !important; min-width: 7% !important; max-width: 7% !important; white-space: nowrap;"
+                t-attf-class="text-end {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                <span>Unit</span>
+            </th>
+        </xpath>
+        <xpath expr="//td[@name='account_invoice_line_name']" position="after">
+            <td name="item_unit" t-att-style="padding_style">
+                <span  t-field="line.product_id.uom_id.name"/>
+            </td>
+        </xpath>
+        <!-- Add summary table below invoice lines -->
+        <xpath expr="//table[@name='invoice_line_table']" position="after">
+            <table class="table table-sm table-bordered"
+                   style="width:100%; table-layout:fixed;
+                          border-collapse:collapse; font-size:10pt; margin-top:20px !important ">
+                <colgroup>
+                    <col style="width:25%;"/>
+                    <col style="width:25%;"/>
+                    <col style="width:25%;"/>
+                    <col style="width:25%;"/>
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <td rowspan="5"
+                            style="text-align:center; vertical-align:middle;">
+                            <!-- Replace with your QR code field or image -->
+                            <span>QR Code</span>
+                        </td>
+                        <td> </td>
+                        <td>Total Amount Excl VAT (SAR) </td>
+                        <td><span t-field="o.amount_untaxed"
+      t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>VAT Amount 15% (SAR)</td>
+                        <td><span t-field="o.amount_tax" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Total Amount Incl VAT(SAR)</td>
+                        <td><span t-field="o.amount_tax"
+      t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>Balance Due</td>
+                        <td><span t-field="o.amount_residual">11.05</span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                           Total in words: SAR <span t-field="o.amount_total_words">Thirty one dollar and Five cents</span></td>
+                        </tr>
+                </tbody>
+            </table>
+
+            <table class="table table-sm table-bordered"
+                   style="width:100%; table-layout:fixed;
+                          border-collapse:collapse; font-size:10pt;">
+
+                <colgroup>
+                    <col style="width:25%;"/>
+                    <col style="width:25%;"/>
+                    <col style="width:25%;"/>
+                    <col style="width:25%;"/>
+                </colgroup>
+
+                <tbody>
+                    <tr>
+                        <td colspan="2"><p>Bank Details</p></td>
+                        <td><p>Prepared By</p></td>
+                        <td><p>Received By</p></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span>Account Name</span><br/>
+                            <span>إسم الحساب</span>
+                        </td>
+                        <td>Tricore Trading</td>
+                        <td rowspan="4" style="vertical-align:bottom;text-align:center;">
+                            <p>Sales Person: <span t-field="o.invoice_user_id"/></p>
+                            <span>توقيع مع ختم</span><br/>
+                            <span>Signature with Stamp</span>
+                        </td>
+                        <td rowspan="4" style="vertical-align:bottom;text-align:center">
+                            <span>توقيع مع ختم</span><br/>
+                            <span>Signature with Stamp</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span>Bank Name</span><br/>
+                            <span>اسم البنك</span>
+                        </td>
+                        <td><t t-if="o.partner_bank_id">
+                                <t t-out="o.partner_bank_id.bank_name or ''"/>
+                            </t>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span>Account No.</span><br/>
+                            <span>رقم الحساب</span>
+                        </td>
+                        <td>
+                            <t t-if="o.partner_bank_id">
+                                <t t-out="o.partner_bank_id.account_number or ''"/>
+                            </t>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span>IBAN No.</span><br/>
+                            <span>رقم الآيبان</span>
+                        </td>
+                        <td>
+                            <t t-if="o.partner_bank_id">
+                                <t t-out="o.partner_bank_id.iban or ''"/>
+                            </t>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </xpath>
+    </template>
+     <template id="l10n_sa_report_invoice_document_inherit" inherit_id="l10n_sa.l10n_sa_report_invoice_document">
+         <xpath expr="//th[@name='th_taxes']" position="replace"/>
+          <xpath expr="//td[@name='td_taxes']" position="replace"/>
+         <xpath expr="//th[@name='th_vat_amount']" position="replace"/>
+         <xpath expr="//th[@name='th_vat_incl']" position="replace">
+             <th name="th_vat_incl" class="text-end text-nowrap">
+                <span name="th_vat_incl_span">Net Amount</span>
+            </th>
+         </xpath>
+         <xpath expr="//th[@name='th_vat_excl']" position="replace">
+             <th name="th_vat_excl" class="text-end">
+                <span name="th_vat_excl_span">Subtotal</span>
+            </th>
+         </xpath>
+         <xpath expr="//th[@name='th_vat_excl']" position="after">
+             <th name="th_vat_amount" class="text-end">
+                    <span name="th_vat_amount_span">VAT 15%</span>
+                </th>
+         </xpath>
+         <xpath expr="//td[@name='td_vat_amount']" position="replace"/>
+         <xpath expr="//td[@name='td_vat_excl']" position="after">
+                <td name="td_vat_amount" class="text-end">
+                <span class="text-nowrap" t-field="line.l10n_gcc_invoice_tax_amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}">4.05</span>
+            </td>
+         </xpath>
+
+
+         <xpath expr="//div[@id='total']" position="replace">
+            <div id="total" t-if="False"/>
+        </xpath>
+            <!-- Remove the default payment terms section -->
+        <xpath expr="//p[@name='payment_communication']" position="replace">
+            <p name="payment_communication" t-if="False"/>
+        </xpath>
+
+        <xpath expr="//div[@id='payment_term']" position="replace">
+            <div id="payment_term" t-if="False"/>
+        </xpath>
+    </template>
+
+
+</odoo>

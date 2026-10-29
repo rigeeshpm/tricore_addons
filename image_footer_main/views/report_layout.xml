@@ -1,0 +1,18 @@
+<odoo>
+    <template id="custom_external_layout_footer"
+              inherit_id="web.external_layout_standard">
+
+        <xpath expr="//div[contains(@t-attf-class, 'footer')]"
+               position="replace">
+
+            <div class="footer o_custom_footer"
+                 style="text-align:center;">
+                <img src="/image_footer_main/static/src/img/footer.png"
+                     alt="Company Footer"
+                     style="width:100%; max-height:100px; object-fit:contain;"/>
+            </div>
+
+        </xpath>
+
+    </template>
+</odoo>

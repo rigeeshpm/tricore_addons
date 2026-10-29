@@ -1,0 +1,17 @@
+
+<odoo>
+    <template id="custom_external_layout_header"
+              inherit_id="web.external_layout_standard">
+        <xpath expr="//div[contains(@t-attf-class, 'header')]"
+               position="replace">
+
+            <div t-attf-class="o_company_#{company.id}_layout header">
+                <img src="/image_header_main/static/src/img/header.png"
+                     alt="Company Header"
+                     style="width:100%; max-height:120px; object-fit:contain;"/>
+            </div>
+
+        </xpath>
+
+    </template>
+</odoo>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_partner_form_arabic_invoice_details" model="ir.ui.view">
+        <field name="name">res.partner.form.arabic.invoice.details</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='parent_id']" position="before">
+                <field name="name_arabic" placeholder="Name in Arabic"/>
+            </xpath>
+            <xpath expr="//field[@name='street']" position="before">
+                    <field name="building_no" placeholder="Building No"/>
+            </xpath>
+            <xpath expr="//field[@name='country_id']" position="after">
+                    <field name="add_no" placeholder="Additional Number"/>
+            </xpath>
+            <xpath expr="//field[@name='state_id']" position="before">
+                    <field name="district" placeholder="District"/>
+            </xpath>
+        </field>
+    </record>
+     <record id="view_partner_bank_form_inherit_iban" model="ir.ui.view">
+        <field name="name">res.partner.bank.form.inherit.iban</field>
+        <field name="model">res.partner.bank</field>
+        <field name="inherit_id" ref="base.view_partner_bank_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='account_number']" position="after">
+                <field name="iban" placeholder="Enter IBAN"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,10 @@
+.invoice-lines-cell-borders {
+    border: none !important;
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+}
+
+.invoice-lines-cell-borders th,
+.invoice-lines-cell-borders td {
+    border: 1px solid #000 !important;
+}
