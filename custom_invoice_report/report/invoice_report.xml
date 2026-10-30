@@ -1,55 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
-      <record id="paperformat_invoice_compact_header" model="report.paperformat">
-        <field name="name">Invoice - Compact Header</field>
-        <field name="format">A4</field>
-        <field name="orientation">Portrait</field>
-        <field name="margin_top">25</field>
-        <field name="margin_bottom">20</field>
-        <field name="margin_left">10</field>
-        <field name="margin_right">10</field>
-        <field name="header_line" eval="False"/>
-        <field name="header_spacing">20</field>
-        <field name="dpi">90</field>
+    <record id="paperformat_compact_header_invoice" model="report.paperformat">
+            <field name="name">Compact Header for custom layouts Invoice</field>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">25</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">10</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">20</field>
+            <field name="dpi">90</field>
     </record>
 
-    <!-- Apply the paper format to the standard invoice report -->
-    <record id="account.account_invoices" model="ir.actions.report">
-        <field name="paperformat_id"
-               ref="custom_invoice_report.paperformat_invoice_compact_header"/>
-    </record>
-    <template id="external_layout_body_inherit" inherit_id="web.external_layout_body">
-<!--        hide default layout title-->
-         <xpath expr="//h2[@t-out='layout_document_title']"
+    <template id="report_invoice_document" inherit_id="account.report_invoice_document" primary="True">
+        <xpath expr="//t[@t-call='web.external_layout']"
                position="attributes">
-            <attribute name="t-if">False</attribute>
+             <attribute name="t-call">custom_report_page_layout.external_layout</attribute>
         </xpath>
-<!--        add new title-->
-        <xpath expr="//t[@t-if='customized_address_layout']" position="before">
-            <div t-if="o and o._name == 'account.move'">
-                <div class="row-12" style="padding-top:35px;text-align:centre">
-                    <div class="col-12"
-                         style="text-align:center; width:100%; margin:0;">Tax Invoice/فاتورة ضريبية</div>
-                </div>
-                <div class="row-12" style="text-align:left;margin-bottom:0 !important">
-                    <span style="font-size:18px;">Invoice No./رقم الفاتورة :</span><span t-out="layout_document_title"/>
-                </div>
-            </div>
+        <xpath expr="//t[@t-set='layout_document_title']" position="replace">
+            <t t-set="layout_document_title">
+                 <div class="row-12" style="padding-top:35px;text-align:centre">
+                            <div class="col-12"
+                                 style="text-align:center; width:100%; margin:0;">Tax Invoice/فاتورة ضريبية</div>
+                        </div>
+                        <div class="row-12" style="text-align:left;margin-bottom:0 !important">
+                            <span style="font-size:18px;">Invoice No./رقم الفاتورة :</span><span t-out="o.name"/>
+                        </div>
+            </t>
         </xpath>
-    </template>
-<!--    new address layout-->
-    <template id="custom_address_table"
-              inherit_id="web.address_layout">
-        <!-- Make the address column occupy the full row for customer invoices -->
-        <xpath expr="//t[@t-set='colclass']" position="attributes">
-            <attribute name="t-value">
-                ('col-12' if o and o._name == 'account.move' else
-                (('col-sm-5' if report_type == 'html' else 'col-5') + ' ms-auto'))
-            </attribute>
-        </xpath>
-
-        <!-- Replace the standard customer address with a full-width table -->
-        <xpath expr="//div[@name='address']" position="replace">
+        <xpath expr="//t[@t-set='address']" position="replace">
+            <t t-set="address">
             <t t-set="partner_ar" t-value="o.partner_id.with_context(lang='ar_001')"/>
             <t t-set="partner_en" t-value="o.partner_id.with_context(lang='en_US')"/>
             <div name="address"
@@ -269,10 +250,8 @@
                     <t t-out="address or None"/>
                 </t>
             </div>
+            </t>
         </xpath>
-    </template>
-    <template id="report_invoice_document_inherit"
-              inherit_id="account.report_invoice_document">
          <xpath expr="//div[@id='informations']" position="attributes">
             <attribute name="t-if">False</attribute>
         </xpath>
@@ -331,14 +310,13 @@
                     }
                 </style>
          </xpath>
-        <!-- Remove the table's outer border -->
-        <xpath expr="//table[@name='invoice_line_table']"
-               position="attributes">
-            <attribute name="style"
-                       add="border:none !important; border-collapse:collapse;"
-                       separator=";"/>
-        </xpath>
-
+<!--        &lt;!&ndash; Remove the table's outer border &ndash;&gt;-->
+<!--        <xpath expr="//table[@name='invoice_line_table']"-->
+<!--               position="attributes">-->
+<!--            <attribute name="style"-->
+<!--                       add="border:none !important; border-collapse:collapse;"-->
+<!--                       separator=";"/>-->
+<!--        </xpath>-->
         <!-- Add borders to every header and data cell -->
         <xpath expr="//table[@name='invoice_line_table']"
                position="attributes">
@@ -538,6 +516,25 @@
             <div id="payment_term" t-if="False"/>
         </xpath>
     </template>
+    <!-- Apply the paper format to the standard invoice report -->
 
+    <template id="custom_report_invoice">
+                <t t-call="web.html_container">
+                    <t t-foreach="docs" t-as="o">
+                        <t t-set="lang" t-value="o.partner_id.lang"/>
+                        <t t-call="custom_invoice_report.report_invoice_document"
+               t-lang="lang"/>
+                    </t>
+                </t>
+    </template>
+
+    <template id="custom_report_invoice_with_payments">
+            <t t-call="custom_invoice_report.custom_report_invoice" print_with_payments="True"/>
+    </template>
+    <record id="account.account_invoices" model="ir.actions.report">
+        <field name="paperformat_id"
+               ref="custom_invoice_report.paperformat_compact_header_invoice"/>
+        <field name="report_name">custom_invoice_report.custom_report_invoice_with_payments</field>
+    </record>
 
 </odoo>

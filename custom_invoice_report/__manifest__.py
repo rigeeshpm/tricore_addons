@@ -3,7 +3,7 @@
     "version": "20.0.1.0.0",
     "category": "Accounting/Accounting",
     "summary": "",
-    "depends": ["account"],
+    "depends": ["account","custom_report_page_layout"],
     "data": [ "report/invoice_report.xml",
               "views/res_partner_views.xml",],
     'assets': {

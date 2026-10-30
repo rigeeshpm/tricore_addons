@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="paperformat_compact_header_sale" model="report.paperformat">
+            <field name="name">Compact Header for custom layouts Sale</field>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">25</field>
+            <field name="margin_bottom">15</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">10</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">30</field>
+            <field name="dpi">90</field>
+    </record>
+    <record id="sale_pdf_quote_builder.action_report_saleorder_raw" model="ir.actions.report">
+        <field name="paperformat_id"
+               ref="custom_quotation_layout.paperformat_compact_header_sale"/>
+    </record>
+    <template id="report_saleorder_custom_layout"
+              inherit_id="sale.report_saleorder_document">
+        <xpath expr="//t[@t-call='web.external_layout']"
+               position="attributes">
+             <attribute name="t-call">custom_report_page_layout.external_layout</attribute>
+        </xpath>
+        <xpath expr="//div[@id='informations']" position="attributes">
+            <attribute name="t-if">False</attribute>
+        </xpath>
+        <xpath expr="//t[@t-set='layout_document_title']" position="replace"/>
+        <!-- Replace the quotation address variable with a 6-row, 4-column details table. -->
+        <xpath expr="//t[@t-set='address']" position="replace">
+            <t t-set="address">
+                <table class="table table-sm table-bordered"
+                       style="width:100%; table-layout:fixed; border-collapse:collapse;
+                              margin:0; padding:0; font-size:9pt;">
+                    <tbody>
+                        <tr>
+                            <th style="width:17%;">Customer</th>
+                            <td style="width:33%;"><span t-field="doc.partner_id.name"/></td>
+                            <th>Quotation Date</th>
+                            <td><span t-field="doc.date_order" t-options='{"widget": "date"}'/></td>
+                        </tr>
+                        <tr>
+                            <th>Delivery Address</th>
+                            <td>
+                                <span t-field="doc.partner_shipping_id"
+                                      t-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
+                            </td>
+                            <th style="width:17%;">Quotation No.</th>
+                            <td style="width:33%;"><span t-field="doc.name"/></td>
+                        </tr>
+                        <tr>
+                            <th>Kind Attn</th>
+                            <td>
+                            </td>
+                            <th>Validity</th>
+                            <td><span t-field="doc.validity_date"/></td>
+                        </tr>
+                        <tr>
+                            <th>TRN</th>
+                            <td>
+                            </td>
+                            <th>ETA</th>
+                            <td>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Project Location</th>
+                            <td>
+
+                            </td>
+                            <th>Delivery Terms</th>
+                            <td>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Project Name</th>
+                            <td>
+
+                            </td>
+                            <th>Name</th>
+                            <td>
+
+                            </td>
+                        </tr>
+<!--                        <tr>-->
+<!--                            <th>Telephone</th>-->
+<!--                            <td><span t-field="doc.partner_id.phone"/></td>-->
+<!--                            <th>Email</th>-->
+<!--                            <td><span t-field="doc.partner_id.email"/></td>-->
+<!--                        </tr>-->
+                    </tbody>
+                </table>
+            </t>
+        </xpath>
+
+        <!-- Add borders to every header and data cell -->
+        <xpath expr="//table[hasclass('o_main_table')]"
+               position="attributes">
+            <attribute name="class" add="sales-lines-cell-borders" separator=" "/>
+        </xpath>
+        <xpath expr="//t[@t-set='hide_taxes_details']" position="replace">
+               <t t-set="hide_taxes_details" t-value="True"/>
+        </xpath>
+        <xpath expr="//th[@name='th_description']" position="replace">
+            <th name="th_description" class="text-start" aria-label="Description">
+                <span>Description</span>
+                            <t t-set="colspan_count" t-value="colspan_count + 1"/>
+                        </th>
+        </xpath>
+        <xpath expr="//th[@name='th_priceunit']" position="before">
+            <th name="th_remarks" class="text-end text-nowrap">
+                            <t t-set="colspan_count" t-value="colspan_count + 1"/>
+                            Remarks
+            </th>
+        </xpath>
+        <xpath expr="//th[@name='th_priceunit']" position="replace">
+            <th name="th_priceunit" class="text-end text-nowrap">
+                            <t t-set="colspan_count" t-value="colspan_count + 1"/>
+                            Rate
+                        </th>
+        </xpath>
+        <xpath expr="//th[@name='th_description']" position="before">
+            <th name="th_model_id" class="text-start" aria-label="Model No">
+                <span>Model No</span>
+                            <t t-set="colspan_count" t-value="colspan_count + 1"/>
+                        </th>
+        </xpath>
+        <xpath expr="//td[@name='td_product_name']" position="before">
+            <td name="td_model">
+                 <span t-field="line.product_id.default_code" class="text-nowrap">3</span>
+            </td>
+        </xpath>
+        <xpath expr="//td[@name='td_product_priceunit']" position="before">
+            <td name="td_remarks">
+            </td>
+        </xpath>
+        <!-- Replace the standard quotation totals section -->
+        <xpath expr="//div[@id='total']" position="replace">
+            <t t-set="gross_total"
+               t-value="sum(line.price_unit * line.product_uom_qty for line in doc.order_line if not line.display_type)"/>
+            <t t-set="discount_amount"
+               t-value="sum(line.price_unit * line.product_uom_qty * line.discount / 100.0 for line in doc.order_line if not line.display_type)"/>
+            <table style="width:100%; border-collapse:collapse;
+                          border:1px solid black; font-size:10pt;
+                          margin-top:5px;">
+                <tr>
+                    <!-- LEFT SECTION -->
+                    <td style="width:66%; vertical-align:top;
+                               padding:0; border:1px solid black;">
+                        <!-- Amount in words and remarks -->
+                        <div style="padding:8px 10px; min-height:145px;">
+                            <strong>Total Amount In Words :</strong>
+                            <div style="margin-left:30%; margin-top:3px;
+                                        font-weight:bold;">
+                                <span t-out="doc.currency_id.amount_to_text(doc.amount_total)"/>
+                            </div>
+                            <div style="margin-top:15px;">
+                                <strong>Noted/Remarks :-</strong>
+                            </div>
+                            <div style="margin-left:30%; margin-top:3px;">
+                            </div>
+                        </div>
+                        <!-- Payment Terms -->
+                        <div style="border-top:1px solid black;
+                                    padding:10px; min-height:100px;">
+                            <strong>Payment Term</strong>
+                            <div style="margin-left:30%; margin-top:3px;">
+                                <span t-field="doc.payment_term_id.name"/>
+                            </div>
+                        </div>
+                    </td>
+                    <td style="width:34%; vertical-align:top;
+                               padding:0; border:1px solid black;">
+                        <table style="width:100%; border-collapse:collapse;
+                                      font-size:10pt;">
+                            <tr>
+                                <td style="width:60%; padding:8px;
+                                           border:1px solid black;">
+                                    Grand Total
+                                </td>
+                                <td style="width:40%; padding:8px;
+                                           text-align:right;
+                                           border:1px solid black;">
+                                    <span t-out="gross_total"
+                                          t-options='{"widget":"monetary","display_currency":doc.currency_id}'/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:8px; border:1px solid black;">
+                                    Discount
+                                </td>
+                                <td style="padding:8px; text-align:right;
+                                           border:1px solid black;">
+                                    <span t-out="discount_amount"
+                                          t-options='{"widget":"monetary","display_currency":doc.currency_id}'/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:8px; border:1px solid black;">
+                                    Taxable Value
+                                </td>
+                                <td style="padding:8px; text-align:right;
+                                           border:1px solid black;">
+                                    <span t-field="doc.amount_untaxed"
+                                          t-options='{"widget":"monetary","display_currency":doc.currency_id}'/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td style="padding:8px; border:1px solid black;">
+                                    VAT
+                                    <span t-out="'%.0f' % (doc.amount_tax / doc.amount_untaxed * 100)"
+                                          t-if="doc.amount_untaxed"/>
+                                    <span t-if="not doc.amount_untaxed"> </span>%
+                                </td>
+                                <td style="padding:8px; text-align:right;
+                                           border:1px solid black;">
+                                    <span t-field="doc.amount_tax"
+                                          t-options='{"widget":"monetary","display_currency":doc.currency_id}'/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding:10px; font-weight:bold;
+                                           border:1px solid black;">
+                                    Grand Total
+                                </td>
+                                <td style="padding:10px; text-align:right;
+                                           font-weight:bold;
+                                           border:1px solid black;">
+                                    <span t-field="doc.amount_total"
+                                          t-options='{"widget":"monetary","display_currency":doc.currency_id}'/>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </xpath>
+        <!-- A dedicated final page. Replace sample terms with approved company wording. -->
+        <xpath expr="//div[@class='page']" position="after">
+        <div class="page" style="page-break-before: always; font-size: 10pt; line-height: 1.5;">
+            <h5 style="text-align: left; margin-bottom: 18px;">
+                TERMS &amp; CONDITIONS
+            </h5>
+            <ol style="padding-left: 20px; margin: 0;">
+                <li style="margin-bottom: 10px;">
+                    <strong>Quotation Validity</strong><br/>
+                    This quotation is valid for the period mentioned in the quotation.
+                    Prices and availability may change after the validity period.
+                </li>
+                <li style="margin-bottom: 10px;">
+                    <strong>Prices</strong><br/>
+                    All prices are quoted in Saudi Riyals (SAR) and are exclusive/inclusive
+                    of VAT as specifically stated in the quotation.
+                </li>
+                <li style="margin-bottom: 10px;">
+                    <strong>Order Confirmation</strong><br/>
+                    Orders will be processed only upon receipt of an official Purchase Order (PO)
+                    or written confirmation from the customer.
+                </li>
+
+                <li style="margin-bottom: 10px;">
+                    <strong>Payment Terms</strong><br/>
+                    Payment shall be made according to the agreed payment terms mentioned in
+                    the quotation. Any additional charges resulting from delayed payment may be applicable.
+                </li>
+
+                <li style="margin-bottom: 10px;">
+                    <strong>Delivery</strong><br/>
+                    Delivery timelines are estimated and may vary depending on product availability,
+                    supplier lead time, customs clearance, transportation, or other circumstances
+                    beyond our control.
+                </li>
+
+                <li style="margin-bottom: 10px;">
+                    <strong>Product Availability</strong><br/>
+                    Product availability is subject to confirmation at the time of order.
+                    Items may be subject to prior sale.
+                </li>
+
+                <li style="margin-bottom: 10px;">
+                    <strong>Changes &amp; Cancellation</strong><br/>
+                    Any cancellation or modification of an order after confirmation may be subject
+                    to applicable charges, depending on the order status and supplier terms.
+                </li>
+
+                <li style="margin-bottom: 10px;">
+                    <strong>Warranty</strong><br/>
+                    Warranty, where applicable, will be provided according to the manufacturer's
+                    standard warranty terms. Warranty does not cover damage resulting from misuse,
+                    improper installation, unauthorized repair, or normal wear and tear.
+                </li>
+                <li style="margin-bottom: 10px;">
+                    <strong>Installation &amp; Services</strong><br/>
+                    Installation, configuration, testing, commissioning, transportation, or other
+                    services will be provided only if specifically mentioned in the quotation.
+                </li>
+
+                <li style="margin-bottom: 10px;">
+                    <strong>Taxes &amp; Government Charges</strong><br/>
+                    VAT and any applicable government fees, customs duties, clearance charges,
+                    or other statutory charges will be charged as applicable unless otherwise stated.
+                </li>
+
+                <li style="margin-bottom: 10px;">
+                    <strong>Inspection &amp; Acceptance</strong><br/>
+                    The customer shall inspect the delivered items upon receipt and notify us of
+                    any visible shortage or damage within the agreed period.
+                </li>
+
+                <li style="margin-bottom: 10px;">
+                    <strong>Force Majeure</strong><br/>
+                    The company shall not be liable for delays or failure to perform due to
+                    circumstances beyond its reasonable control, including supplier delays,
+                    transportation issues, customs restrictions, natural disasters, government
+                    regulations, or other unforeseen events.
+                </li>
+
+                <li style="margin-bottom: 10px;">
+                    <strong>Ownership of Goods</strong><br/>
+                    Ownership of the supplied goods shall remain with the company until full
+                    payment has been received, where applicable under the agreed payment terms.
+                </li>
+
+                <li style="margin-bottom: 10px;">
+                    <strong>Quotation Scope</strong><br/>
+                    Only the items, quantities, specifications, and services specifically
+                    mentioned in the quotation are included. Any additional requirements
+                    will be quoted separately.
+                </li>
+
+                <li style="margin-bottom: 10px;">
+                    <strong>Customer Responsibilities</strong><br/>
+                    The customer shall provide necessary site access, approvals, permits,
+                    information, and other requirements needed to complete the order or
+                    service, where applicable.
+                </li>
+
+                <li style="margin-bottom: 10px;">
+                    <strong>Technical Specifications</strong><br/>
+                    Product specifications are subject to the manufacturer's latest standards.
+                    Equivalent or upgraded models may be offered subject to availability
+                    and customer approval.
+                </li>
+
+                <li style="margin-bottom: 10px;">
+                    <strong>Validity of Agreement</strong><br/>
+                    By issuing a Purchase Order or written confirmation, the customer
+                    acknowledges and accepts the quotation, specifications, payment terms,
+                    and conditions stated herein.
+                </li>
+
+                <li style="margin-bottom: 10px;">
+                    <strong>Governing Law</strong><br/>
+                    These terms and conditions shall be governed by and interpreted in
+                    accordance with the applicable laws and regulations of the Government.
+                </li>
+            </ol>
+        </div>
+        </xpath>
+    </template>
+</odoo>

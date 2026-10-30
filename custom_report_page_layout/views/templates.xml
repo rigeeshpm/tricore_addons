@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+        <template id="address_layout" inherit_id="web.address_layout" primary="True">
+            <!-- Make the address column occupy the full row for customer invoices -->
+            <xpath expr="//t[@t-set='colclass']" position="attributes">
+                <attribute name="t-value">
+                    ('col-12')
+                </attribute>
+            </xpath>
+        </template>
+        <template id="external_layout_body" inherit_id="web.external_layout_body" primary="True">
+<!--        hide default layout title-->
+             <xpath expr="//h2[@t-out='layout_document_title']"
+                   position="attributes">
+                <attribute name="t-if">False</attribute>
+            </xpath>
+    <!--        add new title-->
+            <xpath expr="//t[@t-if='customized_address_layout']" position="before">
+                <t t-if="layout_document_title">
+                    <t t-out="layout_document_title"/>
+                </t>
+            </xpath>
+            <xpath expr="//t[@t-call='web.address_layout']"
+               position="attributes">
+                 <attribute name="t-call">custom_report_page_layout.address_layout</attribute>
+             </xpath>
+    </template>
+<!--    updated external_layout_standard-->
+    <template id="external_layout_standard" inherit_id="web.external_layout_standard" primary="True">
+         <xpath expr="//t[@t-call='web.external_layout_body']"
+           position="attributes">
+             <attribute name="t-call">custom_report_page_layout.external_layout_body</attribute>
+         </xpath>
+    </template>
+<!--    updated external layout-->
+    <template id="external_layout" inherit_id="web.external_layout" primary="True">
+         <xpath expr="//t[@t-call='web.external_layout_standard']"
+           position="attributes">
+             <attribute name="t-call">custom_report_page_layout.external_layout_standard</attribute>
+         </xpath>
+    </template>
+
+</odoo>
