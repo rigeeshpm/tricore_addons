@@ -13,10 +13,10 @@
             <field name="dpi">90</field>
     </record>
     <template id="report_invoice_document" inherit_id="account.report_invoice_document" primary="True">
-        <xpath expr="//t[@t-call='web.external_layout']"
-               position="attributes">
-             <attribute name="t-call">tricore_custom_addons.external_layout</attribute>
-        </xpath>
+<!--        <xpath expr="//t[@t-call='web.external_layout']"-->
+<!--               position="attributes">-->
+<!--             <attribute name="t-call">tricore_custom_addons.external_layout</attribute>-->
+<!--        </xpath>-->
         <xpath expr="//t[@t-set='layout_document_title']" position="replace">
             <t t-set="layout_document_title">
                  <div class="row-12" style="padding-top:35px;text-align:centre">

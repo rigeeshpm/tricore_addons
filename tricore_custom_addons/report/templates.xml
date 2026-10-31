@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <odoo>
-        <template id="address_layout_inherit" inherit_id="web.address_layout" primary="True">
+        <template id="address_layout_inherit" inherit_id="web.address_layout">
             <!-- Make the address column occupy the full row for customer invoices -->
             <xpath expr="//t[@t-set='colclass']" position="attributes">
                 <attribute name="t-value">
@@ -8,7 +8,7 @@
                 </attribute>
             </xpath>
         </template>
-        <template id="external_layout_body_inherit" inherit_id="web.external_layout_body" primary="True">
+        <template id="external_layout_body_inherit" inherit_id="web.external_layout_body">
 <!--    hide default layout title-->
              <xpath expr="//h2[@t-out='layout_document_title']"
                    position="attributes">
@@ -25,19 +25,4 @@
                  <attribute name="t-call">tricore_custom_addons.address_layout_inherit</attribute>
              </xpath>
         </template>
-<!--    updated external_layout_standard-->
-        <template id="external_layout_standard_inherit" inherit_id="web.external_layout_standard" primary="True">
-             <xpath expr="//t[@t-call='web.external_layout_body']"
-               position="attributes">
-                 <attribute name="t-call">tricore_custom_addons.external_layout_body_inherit</attribute>
-             </xpath>
-        </template>
-<!--    updated external layout-->
-    <template id="external_layout" inherit_id="web.external_layout" primary="True">
-         <xpath expr="//t[@t-call='web.external_layout_standard']"
-           position="attributes">
-             <attribute name="t-call">tricore_custom_addons.external_layout_standard_inherit</attribute>
-         </xpath>
-    </template>
-
 </odoo>

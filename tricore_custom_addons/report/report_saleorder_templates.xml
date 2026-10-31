@@ -18,10 +18,10 @@
     </record>
     <template id="report_saleorder_custom_layout"
               inherit_id="sale.report_saleorder_document">
-        <xpath expr="//t[@t-call='web.external_layout']"
-               position="attributes">
-             <attribute name="t-call">tricore_custom_addons.external_layout</attribute>
-        </xpath>
+<!--        <xpath expr="//t[@t-call='web.external_layout']"-->
+<!--               position="attributes">-->
+<!--             <attribute name="t-call">tricore_custom_addons.external_layout</attribute>-->
+<!--        </xpath>-->
         <xpath expr="//div[@id='informations']" position="attributes">
             <attribute name="t-if">False</attribute>
         </xpath>
