@@ -14,13 +14,13 @@
     </record>
     <record id="sale_pdf_quote_builder.action_report_saleorder_raw" model="ir.actions.report">
         <field name="paperformat_id"
-               ref="custom_quotation_layout.paperformat_compact_header_sale"/>
+               ref="tricore_custom_addons.paperformat_compact_header_sale"/>
     </record>
     <template id="report_saleorder_custom_layout"
               inherit_id="sale.report_saleorder_document">
         <xpath expr="//t[@t-call='web.external_layout']"
                position="attributes">
-             <attribute name="t-call">custom_report_page_layout.external_layout</attribute>
+             <attribute name="t-call">tricore_custom_addons.external_layout</attribute>
         </xpath>
         <xpath expr="//div[@id='informations']" position="attributes">
             <attribute name="t-if">False</attribute>
@@ -31,7 +31,7 @@
             <t t-set="address">
                 <table class="table table-sm table-bordered"
                        style="width:100%; table-layout:fixed; border-collapse:collapse;
-                              margin:0; padding:0; font-size:9pt;">
+                              margin:0; padding:0; font-size:10pt;">
                     <tbody>
                         <tr>
                             <th style="width:17%;">Customer</th>
@@ -238,6 +238,9 @@
                 </tr>
             </table>
         </xpath>
+        <xpath expr="//div[@name='signature']" position="replace"/>
+        <xpath expr="//p[@t-if='not is_html_empty(doc.payment_term_id.note)']"
+       position="replace"/>
         <!-- A dedicated final page. Replace sample terms with approved company wording. -->
         <xpath expr="//div[@class='page']" position="after">
         <div class="page" style="page-break-before: always; font-size: 10pt; line-height: 1.5;">

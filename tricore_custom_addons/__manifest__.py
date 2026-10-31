@@ -1,14 +1,16 @@
 {
-    "name": "Custom Invoice Report",
+    "name": "Custom Addons for Tricore",
     "version": "20.0.1.0.0",
     "category": "Accounting/Accounting",
     "summary": "",
-    "depends": ["account","custom_report_page_layout"],
-    "data": [ "report/invoice_report.xml",
+    "depends": ["account","sale","sale_stock"],
+    "data": [ "report/templates.xml",
+             "report/invoice_report.xml",
+              "report/report_saleorder_templates.xml",
               "views/res_partner_views.xml",],
     'assets': {
         'web.report_assets_common': [
-            'custom_invoice_report/static/src/css/invoice_report.css',
+            'tricore_custom_addons/static/src/css/styles.css',
         ],
     },
     "installable": True,

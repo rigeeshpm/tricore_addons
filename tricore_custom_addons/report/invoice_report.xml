@@ -12,11 +12,10 @@
             <field name="header_spacing">20</field>
             <field name="dpi">90</field>
     </record>
-
     <template id="report_invoice_document" inherit_id="account.report_invoice_document" primary="True">
         <xpath expr="//t[@t-call='web.external_layout']"
                position="attributes">
-             <attribute name="t-call">custom_report_page_layout.external_layout</attribute>
+             <attribute name="t-call">tricore_custom_addons.external_layout</attribute>
         </xpath>
         <xpath expr="//t[@t-set='layout_document_title']" position="replace">
             <t t-set="layout_document_title">
@@ -417,7 +416,6 @@
                     <col style="width:25%;"/>
                     <col style="width:25%;"/>
                 </colgroup>
-
                 <tbody>
                     <tr>
                         <td colspan="2"><p>Bank Details</p></td>
@@ -474,7 +472,6 @@
                     </tr>
                 </tbody>
             </table>
-
         </xpath>
     </template>
      <template id="l10n_sa_report_invoice_document_inherit" inherit_id="l10n_sa.l10n_sa_report_invoice_document">
@@ -502,8 +499,6 @@
                 <span class="text-nowrap" t-field="line.l10n_gcc_invoice_tax_amount" t-options="{'widget': 'monetary', 'display_currency': o.currency_id}">4.05</span>
             </td>
          </xpath>
-
-
          <xpath expr="//div[@id='total']" position="replace">
             <div id="total" t-if="False"/>
         </xpath>
@@ -517,24 +512,21 @@
         </xpath>
     </template>
     <!-- Apply the paper format to the standard invoice report -->
-
     <template id="custom_report_invoice">
                 <t t-call="web.html_container">
                     <t t-foreach="docs" t-as="o">
                         <t t-set="lang" t-value="o.partner_id.lang"/>
-                        <t t-call="custom_invoice_report.report_invoice_document"
+                        <t t-call="tricore_custom_addons.report_invoice_document"
                t-lang="lang"/>
                     </t>
                 </t>
     </template>
-
     <template id="custom_report_invoice_with_payments">
-            <t t-call="custom_invoice_report.custom_report_invoice" print_with_payments="True"/>
+            <t t-call="tricore_custom_addons.custom_report_invoice" print_with_payments="True"/>
     </template>
     <record id="account.account_invoices" model="ir.actions.report">
         <field name="paperformat_id"
-               ref="custom_invoice_report.paperformat_compact_header_invoice"/>
-        <field name="report_name">custom_invoice_report.custom_report_invoice_with_payments</field>
+               ref="tricore_custom_addons.paperformat_compact_header_invoice"/>
+        <field name="report_name">tricore_custom_addons.custom_report_invoice_with_payments</field>
     </record>
-
 </odoo>
