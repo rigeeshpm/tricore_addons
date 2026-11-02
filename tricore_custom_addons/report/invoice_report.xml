@@ -9,17 +9,17 @@
             <field name="margin_left">10</field>
             <field name="margin_right">10</field>
             <field name="header_line" eval="False"/>
-            <field name="header_spacing">20</field>
+            <field name="header_spacing">30</field>
             <field name="dpi">90</field>
     </record>
     <template id="report_invoice_document" inherit_id="account.report_invoice_document" primary="True">
-<!--        <xpath expr="//t[@t-call='web.external_layout']"-->
-<!--               position="attributes">-->
-<!--             <attribute name="t-call">tricore_custom_addons.external_layout</attribute>-->
-<!--        </xpath>-->
+        <xpath expr="//t[@t-call='web.external_layout']"
+               position="attributes">
+             <attribute name="t-call">tricore_custom_addons.custom_external_layout_header</attribute>
+        </xpath>
         <xpath expr="//t[@t-set='layout_document_title']" position="replace">
             <t t-set="layout_document_title">
-                 <div class="row-12" style="padding-top:35px;text-align:centre">
+                 <div class="row-12" style="text-align:centre">
                             <div class="col-12"
                                  style="text-align:center; width:100%; margin:0;">Tax Invoice/فاتورة ضريبية</div>
                         </div>
@@ -38,16 +38,16 @@
                     <table class="table table-sm table-bordered"
                            style="width:100%; max-width:100%; table-layout:fixed;
                                     border-collapse:collapse; margin:0 !important;
-                                    padding:0 !important; font-size:10pt;">
+                                    padding:0 !important; font-size:10pt;text-overflow:wrap">
                             <colgroup>
-                                <col style="width:12.5%;"/>
-                                <col style="width:12.5%;"/>
-                                <col style="width:12.5%;"/>
-                                <col style="width:12.5%;"/>
-                                <col style="width:12.5%;"/>
-                                <col style="width:12.5%;"/>
-                                <col style="width:12.5%;"/>
-                                <col style="width:12.5%;"/>
+                                <col style="width:10%;"/>
+                                <col style="width:15%;"/>
+                                <col style="width:10%;"/>
+                                <col style="width:15%;"/>
+                                <col style="width:15%;"/>
+                                <col style="width:10%;"/>
+                                <col style="width:15%;"/>
+                                <col style="width:10%;"/>
                             </colgroup>
                         <thead>
                             <tr>
@@ -364,6 +364,8 @@
         <xpath expr="//table[@name='invoice_line_table']" position="after">
             <table class="table table-sm table-bordered"
                    style="width:100%; table-layout:fixed;
+                          page-break-inside: avoid;
+                          break-inside: avoid;
                           border-collapse:collapse; font-size:10pt; margin-top:20px !important ">
                 <colgroup>
                     <col style="width:25%;"/>

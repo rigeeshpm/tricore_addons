@@ -1,3 +1,14 @@
+table {
+    width: 100%;
+    table-layout: fixed;
+}
+
+table th,
+table td {
+    white-space: normal !important;
+    overflow-wrap: break-word;
+    word-break: normal;
+}
 .invoice-lines-cell-borders {
     border: none !important;
     border-collapse: collapse !important;

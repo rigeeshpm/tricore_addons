@@ -7,6 +7,7 @@
     "data": [ "report/templates.xml",
              "report/invoice_report.xml",
               "report/report_saleorder_templates.xml",
+              'report/purchase_order_layout.xml',
               "views/res_partner_views.xml",],
     'assets': {
         'web.report_assets_common': [

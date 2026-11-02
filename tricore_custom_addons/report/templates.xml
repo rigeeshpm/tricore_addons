@@ -25,4 +25,24 @@
                  <attribute name="t-call">tricore_custom_addons.address_layout_inherit</attribute>
              </xpath>
         </template>
+        <template id="custom_external_layout_header"
+              inherit_id="web.external_layout_standard" primary="True">
+            <xpath expr="//div[contains(@t-attf-class, 'header')]"
+                   position="replace">
+                <div t-attf-class="o_company_#{company.id}_layout header">
+                    <img src="/image_header_main/static/src/img/header.png"
+                         alt="Company Header"
+                         style="width:100%; max-height:120px; object-fit:contain;"/>
+                </div>
+            </xpath>
+            <xpath expr="//div[contains(@t-attf-class, 'footer')]"
+               position="replace">
+                <div class="footer o_custom_footer"
+                     style="text-align:center;">
+                    <img src="/image_footer_main/static/src/img/footer.png"
+                         alt="Company Footer"
+                         style="width:100%; max-height:100px; object-fit:contain;"/>
+                </div>
+            </xpath>
+        </template>
 </odoo>
