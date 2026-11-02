@@ -309,17 +309,14 @@
                     }
                 </style>
          </xpath>
-<!--        &lt;!&ndash; Remove the table's outer border &ndash;&gt;-->
-<!--        <xpath expr="//table[@name='invoice_line_table']"-->
-<!--               position="attributes">-->
-<!--            <attribute name="style"-->
-<!--                       add="border:none !important; border-collapse:collapse;"-->
-<!--                       separator=";"/>-->
-<!--        </xpath>-->
-        <!-- Add borders to every header and data cell -->
+          <!-- Remove the default payment terms section -->
+        <xpath expr="//div[@id='payment_term']" position="replace">
+            <t t-set="payment_term" t-value="False"/>
+        </xpath>
         <xpath expr="//table[@name='invoice_line_table']"
                position="attributes">
-            <attribute name="class" add="invoice-lines-cell-borders" separator=" "/>
+            <t t-set="primary_color" t-value="o.company_id.primary_color or '#000000'"/>
+            <attribute name="class" add="table table-sm invoice-lines-cell-borders" separator=" "/>
         </xpath>
         <xpath expr="//th[@name='th_description']" position="before">
             <th name="th_si_no"
@@ -503,10 +500,6 @@
          </xpath>
          <xpath expr="//div[@id='total']" position="replace">
             <div id="total" t-if="False"/>
-        </xpath>
-            <!-- Remove the default payment terms section -->
-        <xpath expr="//p[@name='payment_communication']" position="replace">
-            <p name="payment_communication" t-if="False"/>
         </xpath>
 
         <xpath expr="//div[@id='payment_term']" position="replace">
