@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="paperformat_compact_header_delivery" model="report.paperformat">
+            <field name="name">Compact Header for custom layouts Sale</field>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">25</field>
+            <field name="margin_bottom">18</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">10</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">30</field>
+            <field name="dpi">90</field>
+    </record>
+    <record id="stock.action_report_delivery" model="ir.actions.report">
+        <field name="paperformat_id"
+               ref="tricore_custom_addons.paperformat_compact_header_delivery"/>
+    </record>
+    <template id="report_delivery_document_custom"
+          inherit_id="stock.report_delivery_document">
+        <xpath expr="//t[@t-call='web.external_layout']"
+               position="attributes">
+             <attribute name="t-call">tricore_custom_addons.custom_external_layout_header</attribute>
+        </xpath>
+        <xpath expr="//div[@class='page']/h2" position="replace"/>
+        <xpath expr="//t[@t-set='address']" position="replace"/>
+        <xpath expr="//div[@id='informations']" position="replace">
+            <table style="width:100%;
+                          border-collapse:collapse;
+                          table-layout:fixed;
+                          margin-bottom:15px;
+                          font-size:11pt;">
+                <colgroup>
+                    <col style="width:35%;"/>
+                    <col style="width:35%;"/>
+                    <col style="width:30%;"/>
+                </colgroup>
+                <!-- FIRST ROW: All cells have borders -->
+                <tr>
+                    <td style="border:1px solid #000; padding:5px;">
+                        <strong>DELIVERY NOTES</strong>
+                    </td>
+                    <td style="border:1px solid #000; padding:5px;">
+                        <strong>Doc # <span t-field="o.name"/> </strong>
+                    </td>
+                    <td style="border:1px solid #000; padding:5px;">
+                        <strong>Date <span t-field="o.date_done"/> </strong>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="border:1px solid black; padding:2px; vertical-align:top;">
+                            <span>Bill To: <span t-field="o.partner_id"/> </span><br/>
+                            <span>Attn: </span><br/>
+                            <span>VAT <span t-field="o.company_id.vat"/></span>
+                    </td>
+                    <td style="border:1px solid black; padding:2px; vertical-align:top;">
+                            <span>LPO No.: </span><br/>
+                            <span>Delivery Term: <span t-field="o.note"/> </span><br/>
+                            <span>Place of Supply:
+                                <span t-field="o.partner_id.state_id.name"/>,
+                                <span t-field="o.partner_id.country_id.name"/></span><br/>
+                    </td>
+                    <td style="border:1px solid black; padding:2px; vertical-align:top;">
+                            <span>Project: </span><br/>
+                            <span>Currency: <span t-field="o.sale_id.currency_id"/></span><br/>
+                            <span>Sales Person: <span t-field="o.sale_id.user_id.name"/> </span>
+                    </td>
+                </tr>
+            </table>
+        </xpath>
+        <xpath expr="//table[@name='stock_move_table']"
+               position="attributes">
+            <attribute name="class" add="table table-sm delivery_table" separator=" "/>
+        </xpath>
+        <xpath expr="//table[@name='stock_move_line_table']"
+               position="attributes">
+            <attribute name="class" add="table table-sm delivery-move-table" separator=" "/>
+        </xpath>
+        <!--        modifies the delivery lines table (stock.move)-->
+        <xpath expr="//th[@name='th_sm_product']" position="replace">
+            <th name="th_sm_product" style="text-align:center;width:300px !important;">Description</th>
+        </xpath>
+         <xpath expr="//th[@name='th_sm_product']" position="before">
+            <th name="th_si_no"
+                style="width: 7% !important; min-width: 7% !important; max-width: 7% !important; white-space: nowrap;"
+                t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                <span>Sr No.</span>
+                <t t-set="line_index" t-value="0"/>
+            </th>
+            <th name="th_name"
+                style="white-space: nowrap;"
+                t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                <span>Item Code</span>
+            </th>
+        </xpath>
+         <!--        modifies the delivery lines table (stock.move.line) -->
+        <xpath expr="//th[@name='th_sml_product']" position="replace">
+            <th name="th_sml_product" style="text-align:center;width:200px !important;">Description</th>
+        </xpath>
+        <xpath expr="//th[@name='th_sml_product']" position="before">
+            <th name="th_si_no"
+                style="width: 7% !important; min-width: 7% !important; max-width: 7% !important; white-space: nowrap;"
+                t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                <span>Sr No.</span>
+                <t t-set="line_index" t-value="0"/>
+            </th>
+            <th name="th_name"
+                style="white-space: nowrap;text-align:center"
+                t-attf-class="{{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                <span>Item Code</span>
+            </th>
+        </xpath>
+        <xpath expr="//th[@name='lot_serial']" position="replace"/>
+        <xpath expr="//th[@name='th_sml_quantity']" position="replace"/>
+        <xpath expr="//th[@name='th_sml_qty_ordered']" position="replace">
+            <th name="th_sml_quantity" style="width:75px !important;text-align:center">Quantity</th>
+            <th name="th_uom" style="text-align:center" >UoM</th>
+            <th name="lot_serial" style="text-align:center" t-if="has_serial_number">
+                                    Lot/Serial Number
+            </th>
+            <th name="th_remarks" style="text-align:center" >Remarks</th>
+        </xpath>
+        <!--replaces the signature section-->
+        <xpath expr="//div[@name='signature']"
+           position="replace">
+            <div style="width:100%; margin-top:20px;">
+                <!-- Prepared By and Received By -->
+                <table style="width:100%; border-collapse:collapse;
+                              table-layout:fixed; font-size:10pt;">
+                    <colgroup>
+                        <col style="width:55%;"/>
+                        <col style="width:45%;"/>
+                    </colgroup>
+                    <tr>
+                        <!-- Prepared By -->
+                        <td style="border:none; vertical-align:top;
+                                   padding:10px;">
+                            <div style="width:200px;text-align:left;margin-top:100px; border-top:1px solid black">
+                                <strong>
+                                    Prepared By
+                                </strong>
+                            </div>
+                        </td>
+                        <!-- Received By -->
+                        <td style="border:1px solid #000;
+                                   padding:7px; vertical-align:top;">
+                            <strong>
+                                Received By :
+                            </strong>
+                            <table style="width:100%;
+                                          border-collapse:collapse;">
+                                <colgroup>
+                                    <col style="width:25%;"/>
+                                    <col style="width:10%;"/>
+                                    <col style="width:65%;"/>
+                                </colgroup>
+                                <tr>
+                                    <td style="border:none; padding:4px;">
+                                        Name
+                                    </td>
+                                    <td style="border:none; padding:4px;">
+                                        :
+                                    </td>
+                                    <td style="border-bottom:1px solid #000;
+                                               padding:4px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border:none; padding:4px;">
+                                        Tel
+                                    </td>
+                                    <td style="border:none; padding:4px;">
+                                        :
+                                    </td>
+                                    <td style="border-bottom:1px solid #000;
+                                               padding:4px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border:none; padding:4px;">
+                                        Signature
+                                    </td>
+                                    <td style="border:none; padding:4px;">
+                                        :
+                                    </td>
+                                    <td style="border-bottom:1px solid #000;
+                                               padding:4px;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="border:none; padding:4px;">
+                                        Date
+                                    </td>
+                                    <td style="border:none; padding:4px;">
+                                        :
+                                    </td>
+                                    <td style="border-bottom:1px solid #000;
+                                               padding:4px;">
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                </table>
+                <!-- Terms and Conditions -->
+                <div style="margin-top:25px; font-size:10pt;">
+                    <strong style="font-size:12pt;">
+                        Terms &amp; Conditions
+                    </strong>
+
+                    <ul style="padding-left:25px; margin-top:12px;">
+
+                        <li style="padding-bottom:3px;">
+                            Return of received materials shall be allowed
+                            to authorized approvals and issuance of return voucher.
+                        </li>
+
+                        <li style="padding-bottom:3px;">
+                            Payment terms are applicable from the date of
+                            delivery of materials. Failing to comply with
+                            the above mentioned payment terms will be
+                            automatic suspension of your credit facility with us.
+                        </li>
+
+                        <li style="padding-bottom:3px;">
+                            Any discrepancy related to this delivery should
+                            be reported to store sales@tricoretrading.com
+                            within 24 hours from the time &amp; date of receipt
+                            of materials. After this cut-off time, this delivery
+                            will be considered as your confirmation of acceptance.
+                        </li>
+                    </ul>
+                </div>
+                <!-- Chemical Goods Notice -->
+                <div style="margin-top:25px;
+                            color:red;
+                            font-size:15pt;">
+
+                    Chemical goods once delivered or sold cannot be returned
+                    or replaced
+                </div>
+            </div>
+        </xpath>
+    <!-- Add custom footer after delivery lines -->
+    </template>
+    <template id="report_delivery_aggregated"
+          inherit_id="stock.stock_report_delivery_aggregated_move_lines">
+        <xpath expr="//td[1]" position="before">
+            <td name="td_index" style="text-align:center; width:5%;">
+                <t t-set="line_index" t-value="line_index+1"/>
+                <span t-out="line_index"/>
+            </td>
+            <td name="td_name" style="text-align:left; width:5%;">
+                <span t-out="o.product_id.default_code"/>
+            </td>
+        </xpath>
+        <xpath expr="//td[@name='move_line_aggregated_quantity']" position="replace"/>
+        <xpath expr="//td[@name='move_line_aggregated_qty_ordered']" position="replace">
+             <td style="text-align:center" name="move_line_aggregated_quantity">
+                <span t-out="format_number(aggregated_lines[line]['quantity'])"/>
+                <t t-if="aggregated_lines[line]['packaging_uom_id'] != aggregated_lines[line]['uom_id']" groups="uom.group_uom">
+                    <br/>
+                    <span class="text-muted" t-out="aggregated_lines[line]['packaging_quantity']">1.00</span>
+                    <span class="text-muted" t-out="aggregated_lines[line]['packaging_uom_id'].name">Pack of 6</span>
+                </t>
+            </td>
+            <td name="td_uom" style="text-align:center">
+                <span t-out="aggregated_lines[line]['uom_id'].name"/>
+            </td>
+            <td name="td_remark" style="text-align:center;">
+                <span></span>
+            </td>
+        </xpath>
+    </template>
+    <template id="stock_report_delivery_has_serial_move_line"
+          inherit_id="stock.stock_report_delivery_has_serial_move_line">
+        <xpath expr="//td[1]" position="before">
+            <td name="td_index" style="text-align:center; width:5%;">
+                <t t-set="line_index" t-value="line_index+1"/>
+                <span t-out="line_index"/>
+            </td>
+            <td name="td_name" style="text-align:left; width:5%;">
+                <span t-out="o.product_id.default_code"/>
+            </td>
+        </xpath>
+        <xpath expr="//t[@name='move_line_lot']" position="replace"/>
+        <xpath expr="//td[@name='move_line_lot_quantity']" position="replace">
+            <td name="move_line_lot_quantity" style="text-align:center">
+                <span t-out="format_number(move_line.quantity)"/>
+                <t t-if="move_line.move_id.packaging_uom_id != move_line.uom_id">
+                    <br/>
+                    <span class="text-muted" t-out="move_line.uom_id._compute_quantity(move_line.quantity, move_line.move_id.packaging_uom_id)">1.00</span>
+                    <span class="text-muted" t-field="move_line.move_id.packaging_uom_id">Pack of 6</span>
+                </t>
+            </td>
+            <td name="td_uom" style="text-align:center">
+               <span t-field="move_line.uom_id"/>
+            </td>
+            <t t-if="has_serial_number" name="move_line_lot">
+                <td class="text-end"><span t-field="move_line.lot_id.name"/></td>
+            </t>
+            <td name="td_remark" style="text-align:center;">
+                <span></span>
+            </td>
+        </xpath>
+    </template>
+</odoo>
