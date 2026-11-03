@@ -1,12 +1,8 @@
 table {
     width: 100%;
-    table-layout: fixed;
 }
 table.invoice-lines-cell-borders {
             width: 100% !important;
-            table-layout: fixed !important;
-    margin-top:2px !important;
-    margin-bottom:2px !important;
         }
 table th,
 table td {
@@ -18,6 +14,7 @@ table td {
     border: none !important;
     border-collapse: collapse !important;
     border-spacing: 0 !important;
+    margin-top:10px !important;margin-bottom:0px !important;
 }
 
 /* Reduce cell padding */

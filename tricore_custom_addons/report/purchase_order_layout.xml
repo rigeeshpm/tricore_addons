@@ -34,7 +34,11 @@
             </t>
         </xpath>
         <xpath expr="//div[@id='informations']" position="replace">
-            <table style="100%;margin-left:0px !important;margin-right:0px !important">
+            <table class="table table-sm table-borderless"
+                   style="width:100%; table-layout:fixed;
+                          page-break-inside: avoid;
+                          break-inside: avoid;margin-left:0px !important;margin-right:0px !important
+                          border-collapse:collapse; font-size:10pt; margin-top:0px !important ">
                 <tr>
                     <td style="border-right:1px solid black;padding-right:3px">
                         <div style="padding:2px;border:1px solid black">
