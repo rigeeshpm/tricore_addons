@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+     <record model="ir.ui.view" id="view_picking_form_inherit">
+        <field name="name">purchase.stock.view.picking.form</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"></field>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='origin']" position="after">
+                <field name="delivery_term" string="Delivery Terms"/>
+            </xpath>
+             <xpath expr="/form/sheet/notebook/page[@name='operations']/field[@name='move_ids']/list//field[@name='forecast_availability']"
+                    position="after">
+                 <field name="remarks"/>
+             </xpath>
+        </field>
+    </record>
+</odoo>

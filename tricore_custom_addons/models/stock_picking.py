@@ -32,3 +32,15 @@ class StockPicking(models.Model):
 
         """,
     )
+    delivery_term =fields.Text(
+        string='Delivery Terms' )
+
+class StockMove(models.Model):
+    _inherit = "stock.move"
+
+    remarks = fields.Text()
+
+class StockMoveLine(models.Model):
+    _inherit = "stock.move.line"
+
+    remarks = fields.Text()

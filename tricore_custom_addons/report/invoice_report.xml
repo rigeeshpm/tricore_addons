@@ -143,6 +143,7 @@
 
                                 <td style="padding:4px; overflow-wrap:anywhere;">
                                     <span t-field="o.partner_id.district"/>
+                                    <span t-field="o.partner_id.x_studio_district"/>
                                 </td>
 
                                 <td style="padding:4px; overflow-wrap:anywhere;">
@@ -163,7 +164,7 @@
                                 </td>
                                 <td style="padding:4px; direction:rtl;
                                            text-align:right; overflow-wrap:anywhere;">
-                                    <span t-field="partner_ar.district"/>
+                                    <span t-field="partner_ar.x_studio_district"/>
 
                                 </td>
                                 <td style="padding:4px; direction:rtl;

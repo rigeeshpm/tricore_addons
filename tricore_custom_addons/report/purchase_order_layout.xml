@@ -27,12 +27,16 @@
                position="attributes">
              <attribute name="t-call">tricore_custom_addons.custom_external_layout_header</attribute>
         </xpath>
+<!--        no need to show default title-->
         <xpath expr="//t[@t-set='layout_document_title']" position="replace"/>
+<!--        -->
         <xpath expr="//t[@t-set='address']" position="replace"/>
+<!--        remove address block-->
         <xpath expr="//t[@t-set='information_block']" position="replace">
             <t t-set="information_block" t-if="o.dest_address_id">
             </t>
         </xpath>
+<!--        new information block-->
         <xpath expr="//div[@id='informations']" position="replace">
             <table class="table table-sm table-borderless"
                    style="width:100%; table-layout:fixed;
@@ -53,7 +57,7 @@
                     </td>
                     <td style="padding-left:3px;border-left:1px solid black">
                         <div style="padding:2px;border:1px solid black">
-                           <span>Date<span t-field="o.date_approve"/></span>
+                           <span>Date: <span t-field="o.date_approve" t-options='{"widget": "date"}'/></span>
                         </div>
                     </td>
                 </tr>
@@ -61,25 +65,27 @@
                     <td style="border-right:1px solid black;padding-right:3px">
                         <span><b>Bill To: </b><span t-field="o.partner_id"/> </span>
                     </td>
-                    <td><span>Payment Term: <span t-field="o.payment_term_id"/></span></td>
-                    <td style="padding-left:3px;border-left:1px solid black"><span>ETD</span></td>
+                    <td><span><b>Payment Term:</b> <span t-field="o.payment_term_id"/></span></td>
+                    <td style="padding-left:3px;border-left:1px solid black"><span><b>ETD: </b><span t-field="o.date_planned" t-options='{"widget": "date"}'/></span></td>
                 </tr>
                 <tr>
-                    <td style="border-right:1px solid black;padding-right:3px"><span>Attn</span></td>
-                    <td><span>Delivery Term: </span></td>
-                    <td style="padding-left:3px;border-left:1px solid black"><span>Currency</span></td>
+                    <td style="border-right:1px solid black;padding-right:3px"><span><b>Attn</b></span></td>
+                    <td><span><b>Delivery Term:</b> </span></td>
+                    <td style="padding-left:3px;border-left:1px solid black"><span><b>Currency:</b> <span t-field="o.company_id.currency_id"/> </span></td>
                 </tr>
                 <tr>
-                    <td style="border-right:1px solid black;padding-right:3px"><span>TRN</span></td>
-                    <td><span>Place of Supply: <t t-out="o.partner_id.state_id"/> , <t t-out="o.partner_id.country_id"/> </span></td>
-                    <td style="padding-left:3px;border-left:1px solid black"><span>Validity</span></td>
+                    <td style="border-right:1px solid black;padding-right:3px"><span><b>PAT:</b> </span></td>
+                    <td><span><b>Place of Supply:</b> <span t-field="o.partner_id.state_id"/> , <span t-field="o.partner_id.country_id"/> </span></td>
+                    <td style="padding-left:3px;border-left:1px solid black"><span><b>Validity:</b>  </span></td>
                 </tr>
             </table>
         </xpath>
-
         <xpath expr="//table[hasclass('o_main_table')]"
                position="attributes">
             <attribute name="class" add="sales-lines-cell-borders" separator=" "/>
+        </xpath>
+        <xpath expr="//th[@name='th_description']" position="attributes">
+            <attribute name="style">text-align: left; width: 40%; padding: 8px;</attribute>
         </xpath>
         <xpath expr="//th[@name='th_description']" position="before">
             <th name="th_si_no"
@@ -89,7 +95,7 @@
                 <t t-set="line_index" t-value="0"/>
             </th>
             <th name="th_name"
-                style="min-width: 200px !important; white-space: nowrap;"
+                style="min-width: 150px !important;max-width: 150px !important; white-space: nowrap;"
                 t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
                 <span>Item Code</span>
             </th>
@@ -104,201 +110,205 @@
             </td>
         </xpath>
           Add Gross Total header before Discount
-    <xpath expr="//th[@name='th_subtotal']" position="replace">
-        <th name="th_subtotal" class="text-end">
-                            <strong>Net Amount</strong>
-                        </th>
-    </xpath>
+        <xpath expr="//th[@name='th_subtotal']" position="replace">
+            <th name="th_subtotal" class="text-end">
+                                <strong>Net Amount</strong>
+                            </th>
+        </xpath>
 
-    <xpath expr="//th[@name='th_taxes']" position="replace"/>
-    <xpath expr="//th[@name='th_quantity']" position="replace">
-        <th name="th_quantity" class="text-end"><strong>Qty/UOM</strong></th>
-    </xpath>
-    <xpath expr="//th[@name='th_discount']" position="before">
-        <th name="th_gross_total" class="text-end">
-            <strong>Gross Amount</strong>
-        </th>
-    </xpath>
-<xpath expr="//td[.//span[@t-field='line.price_subtotal']]" position="replace"/>
-    <!-- Add Gross Total value before Discount -->
-    <xpath expr="//td[span/span[@t-field='line.discount']]" position="before">
-        <td name="td_gross_total" class="text-end">
-            <span t-out="line.price_unit * line.product_qty"
-                  t-options="{'widget': 'monetary',
-                              'display_currency': o.currency_id}"/>
-        </td>
-    </xpath>
+        <xpath expr="//th[@name='th_taxes']" position="replace"/>
+        <xpath expr="//th[@name='th_quantity']" position="replace">
+            <th name="th_quantity" class="text-end"><strong>Qty/UOM</strong></th>
+        </xpath>
+        <xpath expr="//th[@name='th_discount']" position="before">
+            <th name="th_gross_total" class="text-end">
+                <strong>Gross Amount</strong>
+            </th>
+        </xpath>
+        <xpath expr="//td[.//span[@t-field='line.price_subtotal']]" position="replace"/>
+        <!-- Add Gross Total value before Discount -->
+        <xpath expr="//td[span/span[@t-field='line.discount']]" position="before">
+            <td name="td_gross_total" class="text-end">
+                <span t-out="line.price_unit * line.product_qty"
+                      t-options="{'widget': 'monetary',
+                                  'display_currency': o.currency_id}"/>
+            </td>
+        </xpath>
+        <xpath expr="//th[@name='th_discount']" position="replace"/>
+        <xpath expr="//td[span/span[@t-field='line.discount']]" position="replace"/>
         <xpath expr="//t[@t-if='o.payment_term_id']" position="replace"/>
 
-<xpath expr="//p[@t-field='o.note']" position="replace"/>
+        <xpath expr="//p[@t-field='o.note']" position="replace"/>
 
-    <!-- Replace the existing totals section with the custom footer -->
-    <xpath expr="//div[@id='total']" position="replace">
-        <div id="total" class="row mt-3"
-             style="font-size: 13px;">
-            <!-- LEFT SECTION -->
-            <div class="col-7">
-                <!-- Amount in Words -->
-                <div class="row mb-4">
-                    <div class="col-5">
-                        <strong>Total Amount In Words : </strong>
+        <!-- Replace the existing totals section with the custom footer -->
+        <xpath expr="//div[@id='total']" position="replace">
+            <div id="total" class="row mt-3"
+                 style="font-size: 13px;">
+                <!-- LEFT SECTION -->
+                <div class="col-7">
+                    <!-- Amount in Words -->
+                    <div class="row mb-4">
+                        <div class="col-5">
+                            <strong>Total Amount In Words : </strong>
+                        </div>
+                        <div class="col-7">
+                            <span t-field="o.currency_id"/>
+                            <span t-out="o.currency_id.amount_to_text(o.amount_total)"/>
+                        </div>
                     </div>
-                    <div class="col-7">
-                        <span t-field="o.currency_id"/>
-                        <span t-out="o.currency_id.amount_to_text(o.amount_total)"/>
+                    <!-- Narration -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <strong>Narration :</strong>
+                        </div>
+                    </div>
+                    <!-- Terms and Conditions -->
+                    <div class="mt-5">
+                        <div class="mb-1">
+                            <strong>Terms &amp; Conditions</strong>
+                        </div>
+                        <span t-field="o.note"/>
                     </div>
                 </div>
-                <!-- Narration -->
-                <div class="row mb-4">
-                    <div class="col-12">
-                        <strong>Narration :</strong>
-                    </div>
-                </div>
-                <!-- Terms and Conditions -->
-                <div class="mt-5">
-                    <div class="mb-1">
-                        <strong>Terms &amp; Conditions</strong>
-                    </div>
-                    <span t-field="o.note"/>
-                </div>
-            </div>
-            <!-- RIGHT SECTION -->
-            <div class="col-5">
-                <!-- Amount Summary -->
-                <div class="row">
-                    <div class="col-2"/>
-                    <div class="col-5">
-                        <table class="table table-sm"
-                               style="border: 1px solid black;
-                                      margin-bottom: 10px;">
-                            <tbody>
-                                <tr>
-                                    <td style="border: 1px solid black;
-                                               padding: 8px;">
-                                        Sub Total
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="border: 1px solid black;
-                                               padding: 8px;">
-                                        Discount
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="border: 1px solid black;
-                                               padding: 8px;">
-                                        Total
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="border: 1px solid black;
-                                               padding: 8px;">
-                                        VAT
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="border: 1px solid black;
-                                               padding: 8px;">
-                                        <strong>Grand Total</strong>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="col-1"/>
-                    <div class="col-4">
-                        <t t-set="discount_total"
-   t-value="sum(line.price_unit * line.product_qty * (line.discount or 0.0) / 100.0 for line in o.order_line if not line.display_type)"/>
-                        <t t-set="gross_subtotal"
-   t-value="sum(line.price_unit * line.product_qty for line in o.order_line if not line.display_type)"/>
-                        <table class="table table-sm text-end"
-                               style="border: 1px solid black;
-                                      margin-bottom: 10px;">
-                            <tbody>
-                                <tr>
-                                    <td style="border: 1px solid black;
-                                               padding: 8px;">
-                                        <span t-out="gross_subtotal"
-                                              t-options="{'widget': 'monetary',
-                                              'display_currency': o.currency_id}"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="border: 1px solid black;
-                                               padding: 8px;">
-                                         <span t-out="discount_total"
-                                              t-options="{'widget': 'monetary',
-                                              'display_currency': o.currency_id}"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td style="border: 1px solid black;
-                                               padding: 8px;">
-                                        <span t-field="o.amount_untaxed"
-                                              t-options="{'widget': 'monetary',
-                                              'display_currency': o.currency_id}"/>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td style="border: 1px solid black;
-                                               padding: 8px;">
-                                        <span t-field="o.amount_tax"
-                                              t-options="{'widget': 'monetary',
-                                              'display_currency': o.currency_id}"/>
-                                    </td>
-                                </tr>
-
-                                <tr>
-                                    <td style="border: 1px solid black;
-                                               padding: 8px;">
-                                        <strong>
-                                            <span t-field="o.amount_total"
+                <!-- RIGHT SECTION -->
+                <div class="col-5">
+                    <!-- Amount Summary -->
+                    <div class="row">
+                        <div class="col-2"/>
+                        <div class="col-5">
+                            <table class="table table-sm"
+                                   style="border: 1px solid black;
+                                          margin-bottom: 10px;">
+                                <tbody>
+                                    <tr>
+                                        <td style="border: 1px solid black;
+                                                   padding: 8px;">
+                                            Sub Total
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: 1px solid black;
+                                                   padding: 8px;">
+                                            Discount
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: 1px solid black;
+                                                   padding: 8px;">
+                                            Total
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: 1px solid black;
+                                                   padding: 8px;">
+                                            VAT
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: 1px solid black;
+                                                   padding: 8px;">
+                                            <strong>Grand Total</strong>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-1"/>
+                        <div class="col-4">
+                            <t t-set="discount_total"
+       t-value="sum(line.price_unit * line.product_qty * (line.discount or 0.0) / 100.0 for line in o.order_line if not line.display_type)"/>
+                            <t t-set="gross_subtotal"
+       t-value="sum(line.price_unit * line.product_qty for line in o.order_line if not line.display_type)"/>
+                            <table class="table table-sm text-end"
+                                   style="border: 1px solid black;
+                                          margin-bottom: 10px;">
+                                <tbody>
+                                    <tr>
+                                        <td style="border: 1px solid black;
+                                                   padding: 8px;">
+                                            <span t-out="gross_subtotal"
                                                   t-options="{'widget': 'monetary',
                                                   'display_currency': o.currency_id}"/>
-                                        </strong>
-                                    </td>
-                                </tr>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: 1px solid black;
+                                                   padding: 8px;">
+                                             <span t-out="discount_total"
+                                                  t-options="{'widget': 'monetary',
+                                                  'display_currency': o.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="border: 1px solid black;
+                                                   padding: 8px;">
+                                            <span t-field="o.amount_untaxed"
+                                                  t-options="{'widget': 'monetary',
+                                                  'display_currency': o.currency_id}"/>
+                                        </td>
+                                    </tr>
 
-                            </tbody>
+                                    <tr>
+                                        <td style="border: 1px solid black;
+                                                   padding: 8px;">
+                                            <span t-field="o.amount_tax"
+                                                  t-options="{'widget': 'monetary',
+                                                  'display_currency': o.currency_id}"/>
+                                        </td>
+                                    </tr>
 
-                        </table>
-                    </div>
+                                    <tr>
+                                        <td style="border: 1px solid black;
+                                                   padding: 8px;">
+                                            <strong>
+                                                <span t-field="o.amount_total"
+                                                      t-options="{'widget': 'monetary',
+                                                      'display_currency': o.currency_id}"/>
+                                            </strong>
+                                        </td>
+                                    </tr>
 
-                </div>
-                <!-- Signature Section -->
-                <div class="row mt-2"
-                     style="border: 1px solid black;
-                            min-height: 200px;
-                            text-align: center;">
-                    <div class="col-4"
-                         style="border-right: 1px solid black;
-                                padding-top: 180px;">
-                        <div style="border-top: 1px solid black;
-                                    margin: 0 10px;
-                                    padding-top: 5px;">
-                            <strong>Prepared By</strong>
+                                </tbody>
+
+                            </table>
                         </div>
-                    </div>
-                    <div class="col-4"
-                         style="border-right: 1px solid black;
-                                padding-top: 180px;">
 
-                        <div style="border-top: 1px solid black;
-                                    margin: 0 10px;
-                                    padding-top: 5px;">
-                            <strong>Verify By</strong>
+                    </div>
+                    <!-- Signature Section -->
+                    <div class="row mt-2"
+                         style="border: 1px solid black;
+                                min-height: 200px;
+                                text-align: center;">
+                        <div class="col-4"
+                             style="border-right: 1px solid black;
+                                    padding-top: 180px;">
+                            <div style="border-top: 1px solid black;
+                                        margin: 0 10px;
+                                        padding-top: 5px;">
+                                <strong>Prepared By</strong>
+                            </div>
+                        </div>
+                        <div class="col-4"
+                             style="border-right: 1px solid black;
+                                    padding-top: 180px;">
+
+                            <div style="border-top: 1px solid black;
+                                        margin: 0 10px;
+                                        padding-top: 5px;">
+                                <strong>Verify By</strong>
+                            </div>
+
                         </div>
 
-                    </div>
+                        <div class="col-4"
+                             style="padding-top: 180px;">
 
-                    <div class="col-4"
-                         style="padding-top: 180px;">
+                            <div style="border-top: 1px solid black;
+                                        margin: 0 10px;
+                                        padding-top: 5px;">
+                                <strong>Approved By</strong>
+                            </div>
 
-                        <div style="border-top: 1px solid black;
-                                    margin: 0 10px;
-                                    padding-top: 5px;">
-                            <strong>Approved By</strong>
                         </div>
 
                     </div>
@@ -307,9 +317,7 @@
 
             </div>
 
-        </div>
-
-    </xpath>
+        </xpath>
     </template>
 
 </odoo>
