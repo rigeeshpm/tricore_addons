@@ -44,7 +44,7 @@
                         <strong>Doc # <span t-field="o.name"/> </strong>
                     </td>
                     <td style="border:1px solid #000; padding:5px;">
-                        <strong>Date <span t-field="o.date_done"/> </strong>
+                        <strong>Date <span t-field="o.scheduled_date" t-options='{"widget": "date"}'/> </strong>
                     </td>
                 </tr>
                 <tr>
@@ -55,7 +55,7 @@
                     </td>
                     <td style="border:1px solid black; padding:2px; vertical-align:top;">
                             <span>LPO No.: </span><br/>
-                            <span>Delivery Term: <span t-field="o.note"/> </span><br/>
+                            <span>Delivery Term:  </span><br/>
                             <span>Place of Supply:
                                 <span t-field="o.partner_id.state_id.name"/>,
                                 <span t-field="o.partner_id.country_id.name"/></span><br/>
@@ -68,32 +68,64 @@
                 </tr>
             </table>
         </xpath>
-        <xpath expr="//table[@name='stock_move_table']"
-               position="attributes">
-            <attribute name="class" add="table table-sm delivery_table" separator=" "/>
-        </xpath>
         <xpath expr="//table[@name='stock_move_line_table']"
                position="attributes">
             <attribute name="class" add="table table-sm delivery-move-table" separator=" "/>
         </xpath>
-        <!--        modifies the delivery lines table (stock.move)-->
-        <xpath expr="//th[@name='th_sm_product']" position="replace">
-            <th name="th_sm_product" style="text-align:center;width:300px !important;">Description</th>
+        <!--        modifies the delivery lines table (stock.move)  for deliveries which are not confirmed-->
+        <xpath expr="//table[@name='stock_move_table']" position="replace">
+            <table class="table table-sm delivery-move-table" t-if="o.state!='done'" name="stock_move_table">
+                <thead>
+                    <tr>
+                        <t t-set="line_index" t-value="0"/>
+                        <th name="th_si_no"
+                            style="text-align:center;width: 6% !important; min-width: 7% !important; max-width: 7% !important; white-space: nowrap;"
+                            t-attf-class="{{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                            <span>Sr No.</span>
+                        </th>
+                        <th name="th_name"
+                            style="white-space: nowrap;width: 150px !important; min-width: 150px !important; max-width: 150px !important; "
+                            t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
+                            <span>Item Code</span>
+                        </th>
+                        <th name="th_sm_product" style="text-align:left;min-width:40% !important;">Description</th>
+                        <th name="th_sm_quantity" style="width:75px !important;text-align:center">Quantity</th>
+                        <th name="th_uom" style="text-align:left" >UoM</th>
+                        <th name="th_remarks" style="white-space: nowrap;width: 150px !important; min-width: 150px !important; max-width: 150px !important;">
+                            Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-set="lines" t-value="o.move_ids.filtered(lambda x: x.product_uom_qty)"/>
+                    <tr t-foreach="lines" t-as="move">
+                        <td name="td_index" style="text-align:center;">
+                            <t t-set="line_index" t-value="line_index+1"/>
+                            <span t-out="line_index"/>
+                        </td>
+                        <td name="td_name" style="text-align:left;">
+                            <span t-out="o.product_id.default_code"/>
+                        </td>
+                        <td name="td_description" style="text-align:left">
+                            <span t-field="move.product_id">Customizable Desk</span>
+                            <p t-if="move.description_picking and move.description_picking != move.product_id.name and move._get_report_description_picking()">
+                                <span t-out="move._get_report_description_picking()" t-options="{'widget': 'text'}">Description on transfer</span>
+                            </p>
+                        </td>
+                        <td name="o_td_quantity" style="text-align:center">
+                            <span t-out="format_number(move.product_uom_qty)" class="text-nowrap">3.00</span>
+                        </td>
+                        <td name="td_uom" style="text-align:center">
+                            <span t-field="move.uom_id">units</span>
+                        </td>
+                        <td name="td_remark" style="text-align:left;">
+                            <span></span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </xpath>
-         <xpath expr="//th[@name='th_sm_product']" position="before">
-            <th name="th_si_no"
-                style="width: 7% !important; min-width: 7% !important; max-width: 7% !important; white-space: nowrap;"
-                t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
-                <span>Sr No.</span>
-                <t t-set="line_index" t-value="0"/>
-            </th>
-            <th name="th_name"
-                style="white-space: nowrap;"
-                t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
-                <span>Item Code</span>
-            </th>
-        </xpath>
-         <!--        modifies the delivery lines table (stock.move.line) -->
+
+         <!--        modifies the delivery lines table (stock.move.line) for deliveries which are  confirmed-->
         <xpath expr="//th[@name='th_sml_product']" position="replace">
             <th name="th_sml_product" style="text-align:center;width:200px !important;">Description</th>
         </xpath>
@@ -207,29 +239,8 @@
                     <strong style="font-size:12pt;">
                         Terms &amp; Conditions
                     </strong>
+                    <span t-field="o.note"/>
 
-                    <ul style="padding-left:25px; margin-top:12px;">
-
-                        <li style="padding-bottom:3px;">
-                            Return of received materials shall be allowed
-                            to authorized approvals and issuance of return voucher.
-                        </li>
-
-                        <li style="padding-bottom:3px;">
-                            Payment terms are applicable from the date of
-                            delivery of materials. Failing to comply with
-                            the above mentioned payment terms will be
-                            automatic suspension of your credit facility with us.
-                        </li>
-
-                        <li style="padding-bottom:3px;">
-                            Any discrepancy related to this delivery should
-                            be reported to store sales@tricoretrading.com
-                            within 24 hours from the time &amp; date of receipt
-                            of materials. After this cut-off time, this delivery
-                            will be considered as your confirmation of acceptance.
-                        </li>
-                    </ul>
                 </div>
                 <!-- Chemical Goods Notice -->
                 <div style="margin-top:25px;
@@ -243,6 +254,9 @@
         </xpath>
     <!-- Add custom footer after delivery lines -->
     </template>
+<!--    we have extend two different templates for customizing delivery lines table body structure-->
+
+<!--    for confirmed delivery without LOT/serial no-->
     <template id="report_delivery_aggregated"
           inherit_id="stock.stock_report_delivery_aggregated_move_lines">
         <xpath expr="//td[1]" position="before">
@@ -272,6 +286,7 @@
             </td>
         </xpath>
     </template>
+    <!--    for confirmed delivery with LOT/serial no-->
     <template id="stock_report_delivery_has_serial_move_line"
           inherit_id="stock.stock_report_delivery_has_serial_move_line">
         <xpath expr="//td[1]" position="before">
