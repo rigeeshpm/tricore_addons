@@ -12,13 +12,11 @@ class ResPartner(models.Model):
     district = fields.Char(translate=True)
     add_no = fields.Char(translate=True)
 
-
 class ResCountryState(models.Model):
     _inherit = 'res.country.state'
 
     name = fields.Char(string='State Name', required=True, translate=True,
                help='Administrative divisions of a country. E.g. Fed. State, Department, Canton')
-
 
 class ResPartnerBank(models.Model):
     _inherit = "res.partner.bank"
