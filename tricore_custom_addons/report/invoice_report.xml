@@ -142,7 +142,7 @@
                                 </td>
 
                                 <td style="padding:4px; overflow-wrap:anywhere;">
-                                    <span t-out="partner_en.district"/>
+                                    <span t-field="o.partner_id.district"/>
                                 </td>
 
                                 <td style="padding:4px; overflow-wrap:anywhere;">
@@ -163,7 +163,7 @@
                                 </td>
                                 <td style="padding:4px; direction:rtl;
                                            text-align:right; overflow-wrap:anywhere;">
-                                    <span t-out="partner_ar.district"/>
+                                    <span t-field="partner_ar.district"/>
 
                                 </td>
                                 <td style="padding:4px; direction:rtl;
@@ -258,7 +258,7 @@
                     </thead>
 
                     <tbody>
-                        <tr>
+                        <tr style="min-height:50px;">
                             <td>
                                 <t t-if="sale_orders">
                                     <t t-out="sale_orders[0].client_order_ref"/>
@@ -308,12 +308,10 @@
                     * index */
                     table.invoice-lines-cell-borders th[name='th_name'],
                     table.invoice-lines-cell-borders td[name='product_name'] {
-                        width:10% !important;
-                    }
-                    /* Unit */
-                    table.invoice-lines-cell-borders th[name='th_unit'],
-                    table.invoice-lines-cell-borders td[name='item_unit'] {
-                        width: 7% !important;
+                        width: 200px !important;
+                        min-width: 0 !important;
+                        white-space: normal !important;
+                        overflow-wrap: break-word;
                     }
                     /* Quantity */
                     table.invoice-lines-cell-borders th[name='th_quantity'],
@@ -327,13 +325,13 @@
                     /* Unit Price */
                     table.invoice-lines-cell-borders th[name='th_priceunit'],
                     table.invoice-lines-cell-borders td[name='td_price_unit'] {
-                        width: 10% !important;
+                        width: 8% !important;
                     }
 
                     /* Taxes */
                     table.invoice-lines-cell-borders th[name='th_vat_amount'],
                     table.invoice-lines-cell-borders td[name='td_vat_amount'] {
-                        width: 10% !important;
+                        width: 8% !important;
                     }
                     /* Taxes */
                     table.invoice-lines-cell-borders th[name='th_subtotal
@@ -364,7 +362,7 @@
                 <t t-set="line_index" t-value="line_index+1"/>
                 <t t-out="line_index"/>
             </td>
-            <td name="product_name" style="width: 10% !important;">
+            <td name="product_name">
              <span  t-field="line.product_id.name"/>
             </td>
         </xpath>
