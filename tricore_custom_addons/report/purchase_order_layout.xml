@@ -80,26 +80,53 @@
                 </tr>
             </table>
         </xpath>
+<!--        purchase lines table -->
+<!--        add table class-->
         <xpath expr="//table[hasclass('o_main_table')]"
                position="attributes">
             <attribute name="class" add="sales-lines-cell-borders" separator=" "/>
         </xpath>
-        <xpath expr="//th[@name='th_description']" position="attributes">
-            <attribute name="style">text-align: left; width: 40%; padding: 8px;</attribute>
+        <xpath expr="//table[hasclass('o_main_table')]/thead" position="replace">
+            <thead>
+                <tr>
+                     <th name="th_si_no"
+                        style="width: 5% !important; min-width: 5% !important; max-width: 5% !important; white-space: nowrap;">
+                        <span>#</span>
+                        <t t-set="line_index" t-value="0"/>
+                    </th>
+                    <th name="th_name"
+                        style="min-width: 100px !important;max-width: 100px !important; white-space: nowrap;">
+                        <span>Item Code</span>
+                    </th>
+                    <th name="th_description" style="text-align: left; width: 40%; padding: 8px;" class="text-start"><strong>Description</strong></th>
+                     <th name="th_quantity" class="text-end"><strong>Qty/UOM</strong></th>
+                    <th name="th_price_unit" class="text-end"><strong>Unit Price</strong></th>
+                    <th name="th_gross_total" class="text-end">
+                        <strong>Gross Amount</strong>
+                    </th>
+                    <th name="th_taxes" class="text-end"><strong>Taxes</strong></th>
+                    <th name="th_subtotal" class="text-end">
+                                <strong>Net Amount</strong>
+                    </th>
+                </tr>
+            </thead>
         </xpath>
-        <xpath expr="//th[@name='th_description']" position="before">
-            <th name="th_si_no"
-                style="width: 5% !important; min-width: 5% !important; max-width: 5% !important; white-space: nowrap;"
-                t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
-                <span>#</span>
-                <t t-set="line_index" t-value="0"/>
-            </th>
-            <th name="th_name"
-                style="min-width: 100px !important;max-width: 100px !important; white-space: nowrap;"
-                t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
-                <span>Item Code</span>
-            </th>
-        </xpath>
+<!--        <xpath expr="//th[@name='th_description']" position="attributes">-->
+<!--            <attribute name="style">text-align: left; width: 40%; padding: 8px;</attribute>-->
+<!--        </xpath>-->
+<!--        <xpath expr="//th[@name='th_description']" position="before">-->
+<!--            <th name="th_si_no"-->
+<!--                style="width: 5% !important; min-width: 5% !important; max-width: 5% !important; white-space: nowrap;"-->
+<!--                t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">-->
+<!--                <span>#</span>-->
+<!--                <t t-set="line_index" t-value="0"/>-->
+<!--            </th>-->
+<!--            <th name="th_name"-->
+<!--                style="min-width: 100px !important;max-width: 100px !important; white-space: nowrap;"-->
+<!--                t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">-->
+<!--                <span>Item Code</span>-->
+<!--            </th>-->
+<!--        </xpath>-->
         <xpath expr="//td[@id='product']" position="before">
             <td name="si_no" t-att-style="padding_style">
                 <t t-set="line_index" t-value="line_index+1"/>
@@ -110,19 +137,19 @@
             </td>
         </xpath>
           Add Gross Total header before Discount
-        <xpath expr="//th[@name='th_subtotal']" position="replace">
-            <th name="th_subtotal" class="text-end">
-                                <strong>Net Amount</strong>
-                            </th>
-        </xpath>
-        <xpath expr="//th[@name='th_quantity']" position="replace">
-            <th name="th_quantity" class="text-end"><strong>Qty/UOM</strong></th>
-        </xpath>
-        <xpath expr="//th[@name='th_discount']" position="before">
-            <th name="th_gross_total" class="text-end">
-                <strong>Gross Amount</strong>
-            </th>
-        </xpath>
+<!--        <xpath expr="//th[@name='th_subtotal']" position="replace">-->
+<!--            <th name="th_subtotal" class="text-end">-->
+<!--                                <strong>Net Amount</strong>-->
+<!--                            </th>-->
+<!--        </xpath>-->
+<!--        <xpath expr="//th[@name='th_quantity']" position="replace">-->
+<!--            <th name="th_quantity" class="text-end"><strong>Qty/UOM</strong></th>-->
+<!--        </xpath>-->
+<!--        <xpath expr="//th[@name='th_discount']" position="before">-->
+<!--            <th name="th_gross_total" class="text-end">-->
+<!--                <strong>Gross Amount</strong>-->
+<!--            </th>-->
+<!--        </xpath>-->
 
         <!-- Add Gross Total value before Discount -->
         <xpath expr="//td[span/span[@t-field='line.discount']]" position="before">
@@ -139,8 +166,10 @@
                                   'display_currency': o.currency_id}"/>
             </td>
         </xpath>
-        <xpath expr="//th[@name='th_discount']" position="replace"/>
+<!--        <xpath expr="//th[@name='th_discount']" position="replace"/>-->
         <xpath expr="//td[span/span[@t-field='line.discount']]" position="replace"/>
+
+<!--purchase order table end-->
         <xpath expr="//t[@t-if='o.payment_term_id']" position="replace"/>
         <xpath expr="//p[@t-field='o.note']" position="replace"/>
         <!-- Replace the existing totals section with the custom footer -->
