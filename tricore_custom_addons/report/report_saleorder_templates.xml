@@ -40,10 +40,41 @@
                                 <td><span t-field="doc.date_order" t-options='{"widget": "date"}'/></td>
                             </tr>
                             <tr>
-                                <td>Delivery Address</td>
+                                <td>Address</td>
                                 <td>
-                                    <span t-field="doc.partner_shipping_id"
-                                          t-options='{"widget": "contact", "fields": ["address"], "no_marker": true}'/>
+                                    <t t-set="shipping" t-value="doc.partner_shipping_id"/>
+                                    <!-- Address Fields -->
+                                        <div t-if="shipping.x_studio_building">
+                                            <span t-field="shipping.x_studio_building"/>
+                                        </div>
+
+                                        <div t-if="shipping.street">
+                                            <span t-field="shipping.street"/>
+                                        </div>
+
+                                        <div t-if="shipping.street2">
+                                            <span t-field="shipping.street2"/>
+                                        </div>
+
+                                        <div t-if="shipping.city">
+                                            <span t-field="shipping.city"/>
+                                        </div>
+                                        <div t-if="shipping.state_id">
+                                            <span t-field="shipping.state_id"/>
+                                        </div>
+
+                                        <div>
+                                            <span t-if="shipping.zip"
+                                                  t-field="shipping.zip"/>
+                                            <span t-if="shipping.add_no">
+                                                <span t-if="shipping.zip"> - </span>
+                                                <span t-field="shipping.add_no"/>
+                                            </span>
+                                        </div>
+
+                                        <div t-if="shipping.country_id">
+                                            <span t-field="shipping.country_id"/>
+                                        </div>
                                 </td>
                                 <td style="width:17%;">Quotation No.</td>
                                 <td style="width:33%;"><span t-field="doc.name"/></td>
@@ -118,7 +149,7 @@
                         </th>
         </xpath>
         <xpath expr="//th[@name='th_description']" position="before">
-            <th name="th_model_id" style="text-align: left; width: 150px !important; " class="text-start" aria-label="Model No">
+            <th name="th_model_id" style="text-align: left; min-width: 150px !important;width: 150px !important; " class="text-start" aria-label="Model No">
                 <span>Code</span>
                             <t t-set="colspan_count" t-value="colspan_count + 1"/>
                         </th>
