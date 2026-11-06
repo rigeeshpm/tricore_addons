@@ -55,9 +55,9 @@
                                         <span t-if="shipping.x_studio_building">
                                             ,<span t-field="shipping.x_studio_building"/>
                                         </span>
-                                        <div t-if="shipping.x_studio_secondary">
+                                        <span t-if="shipping.x_studio_secondary">
                                             ,<span t-field="shipping.x_studio_secondary"/>
-                                        </div>
+                                        </span>
                                         <br/>
                                         <span t-if="shipping.city">
                                             <span t-field="shipping.city"/>
