@@ -9,7 +9,6 @@ class ResPartner(models.Model):
     street2 = fields.Char(translate=True)
     city = fields.Char(translate=True)
     building_no = fields.Char(translate=True)
-    district = fields.Char(translate=True)
     add_no = fields.Char(translate=True)
 
 class ResCountryState(models.Model):
