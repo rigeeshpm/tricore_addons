@@ -115,8 +115,6 @@
                                 <strong>Net Amount</strong>
                             </th>
         </xpath>
-
-        <xpath expr="//th[@name='th_taxes']" position="replace"/>
         <xpath expr="//th[@name='th_quantity']" position="replace">
             <th name="th_quantity" class="text-end"><strong>Qty/UOM</strong></th>
         </xpath>
@@ -125,7 +123,7 @@
                 <strong>Gross Amount</strong>
             </th>
         </xpath>
-        <xpath expr="//td[.//span[@t-field='line.price_subtotal']]" position="replace"/>
+
         <!-- Add Gross Total value before Discount -->
         <xpath expr="//td[span/span[@t-field='line.discount']]" position="before">
             <td name="td_gross_total" class="text-end">
@@ -134,12 +132,17 @@
                                   'display_currency': o.currency_id}"/>
             </td>
         </xpath>
+        <xpath expr="//td[.//span[@t-field='line.price_subtotal']]" position="replace">
+            <td name="td_net_amount" class="text-end">
+                <span t-out="line.price_unit * line.product_qty *(1- line.discount/100)"
+                      t-options="{'widget': 'monetary',
+                                  'display_currency': o.currency_id}"/>
+            </td>
+        </xpath>
         <xpath expr="//th[@name='th_discount']" position="replace"/>
         <xpath expr="//td[span/span[@t-field='line.discount']]" position="replace"/>
         <xpath expr="//t[@t-if='o.payment_term_id']" position="replace"/>
-
         <xpath expr="//p[@t-field='o.note']" position="replace"/>
-
         <!-- Replace the existing totals section with the custom footer -->
         <xpath expr="//div[@id='total']" position="replace">
             <div id="total" class="row mt-3"

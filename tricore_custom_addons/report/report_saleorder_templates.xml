@@ -44,33 +44,31 @@
                                 <td>
                                     <t t-set="shipping" t-value="doc.partner_shipping_id"/>
                                     <!-- Address Fields -->
-                                        <div t-if="shipping.x_studio_building">
-                                            <span t-field="shipping.x_studio_building"/>
-                                        </div>
 
-                                        <div t-if="shipping.street">
+                                        <span t-if="shipping.street">
                                             <span t-field="shipping.street"/>
-                                        </div>
+                                        </span><br/>
 
-                                        <div t-if="shipping.street2">
+                                        <span t-if="shipping.street2">
                                             <span t-field="shipping.street2"/>
+                                        </span>
+                                        <span t-if="shipping.x_studio_building">
+                                            ,<span t-field="shipping.x_studio_building"/>
+                                        </span>
+                                        <div t-if="shipping.x_studio_secondary">
+                                            ,<span t-field="shipping.x_studio_secondary"/>
                                         </div>
-
-                                        <div t-if="shipping.city">
+                                        <br/>
+                                        <span t-if="shipping.city">
                                             <span t-field="shipping.city"/>
-                                        </div>
-                                        <div t-if="shipping.state_id">
-                                            <span t-field="shipping.state_id"/>
-                                        </div>
-
-                                        <div>
-                                            <span t-if="shipping.zip"
+                                        </span>
+                                        <span t-if="shipping.state_id">
+                                            , <span t-field="shipping.state_id"/>
+                                        </span>
+                                        <span>
+                                            , <span t-if="shipping.zip"
                                                   t-field="shipping.zip"/>
-                                            <span t-if="shipping.add_no">
-                                                <span t-if="shipping.zip"> - </span>
-                                                <span t-field="shipping.add_no"/>
-                                            </span>
-                                        </div>
+                                        </span>
 
                                         <div t-if="shipping.country_id">
                                             <span t-field="shipping.country_id"/>
@@ -125,22 +123,25 @@
         </xpath>
 
         <xpath expr="//th[@name='th_description']" position="replace">
-            <th name="th_description" style="text-align: left; width: 40%; " class="text-start" aria-label="Description">
+            <th name="th_description" style="text-align: left; min-width: 30% !important; "  aria-label="Description">
                 <span>Description</span>
-                            <t t-set="colspan_count" t-value="colspan_count + 1"/>
-                        </th>
+                <t t-set="colspan_count" t-value="colspan_count + 1"/>
+            </th>
         </xpath>
         <xpath expr="//th[@name='th_priceunit']" position="before">
-            <th name="th_remarks" class="text-start text-nowrap">
+            <th name="th_remarks" class="text-start text-nowrap" style="width: 100px !important;
+                        min-width: 100px !important;
+                        white-space: normal !important;
+                        overflow-wrap: break-word;">
                             <t t-set="colspan_count" t-value="colspan_count + 1"/>
-                            Remarks
+                Remarks
             </th>
         </xpath>
         <xpath expr="//th[@name='th_quantity']" position="replace">
-            <th name="th_quantity" class="text-start text-nowrap" aria-label="Quantity">
+            <th name="th_quantity" style="text-align: left; max-width: 60px !important; " class="text-start text-nowrap" aria-label="Quantity">
                 Qty/Unit
-                            <t t-set="colspan_count" t-value="colspan_count + 1"/>
-                        </th>
+                <t t-set="colspan_count" t-value="colspan_count + 1"/>
+            </th>
         </xpath>
         <xpath expr="//th[@name='th_priceunit']" position="replace">
             <th name="th_priceunit" class="text-end text-nowrap">
