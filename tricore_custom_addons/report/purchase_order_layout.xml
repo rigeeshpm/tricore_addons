@@ -95,7 +95,7 @@
                 <t t-set="line_index" t-value="0"/>
             </th>
             <th name="th_name"
-                style="min-width: 150px !important;max-width: 150px !important; white-space: nowrap;"
+                style="min-width: 100px !important;max-width: 100px !important; white-space: nowrap;"
                 t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">
                 <span>Item Code</span>
             </th>
