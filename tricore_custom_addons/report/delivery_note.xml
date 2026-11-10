@@ -51,16 +51,16 @@
                     <td style="border:1px solid black; padding:2px; vertical-align:top;">
                                 <table class="table-borderless" style="width: 100%; border-collapse: collapse; border: none !important;">
                                     <tr style="border: none !important;">
-                                        <td style="border: none !important;"> Bill To:  </td>
-                                        <td style="border: none !important;"> <span t-field="o.partner_id"/> </td>
+                                        <td style="border: none !important;width:60px;"> Bill To:  </td>
+                                        <td style="border: none !important;overflow-wrap:anywhere;"> <span t-field="o.partner_id"/> </td>
                                     </tr>
                                     <tr style="border: none !important;">
                                         <td style="border: none !important;"></td>
-                                        <td style="border: none !important;"> <span t-field="o.partner_id.name_ar"/> </td>
+                                        <td style="border: none !important;overflow-wrap:anywhere;"> <span t-field="o.partner_id.name_ar"/> </td>
                                     </tr>
                                     <tr style="border: none !important;">
                                         <td style="border: none !important;">Attn: </td>
-                                        <td style="border: none !important;"><span t-field="o.user_id"/></td>
+                                        <td style="border: none !important;overflow-wrap:anywhere;"><span t-field="o.user_id"/></td>
                                     </tr>
                                     <tr style="border: none !important;">
                                         <td style="border: none !important;">VAT:  </td>
