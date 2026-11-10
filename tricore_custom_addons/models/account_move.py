@@ -11,7 +11,6 @@ class AccountMove(models.Model):
         )
         if not region_plan:
             return ""
-
         # Collect all unique account IDs across all invoice lines
         account_ids = set()
         for line in self.invoice_line_ids:
@@ -21,14 +20,11 @@ class AccountMove(models.Model):
                 for acc_id in key.split(','):
                     if acc_id.isdigit():
                         account_ids.add(int(acc_id))
-
         if not account_ids:
             return ""
-
         # Find the first account matching the 'Region' plan
         region_account = self.env['account.analytic.account'].search([
             ('id', 'in', list(account_ids)),
             ('plan_id', '=', region_plan.id)
         ], limit=1)
-
         return region_account.name if region_account else ""
