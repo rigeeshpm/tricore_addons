@@ -4,12 +4,19 @@ from odoo import fields, models
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    name_arabic = fields.Char()
+    name_ar = fields.Char(placeholder='Name in Arabic')
     street = fields.Char(translate=True)
     street2 = fields.Char(translate=True)
     city = fields.Char(translate=True)
     building_no = fields.Char(translate=True)
     add_no = fields.Char(translate=True)
+
+    def translate_to_arabic_digits(self, text):
+        if not text:
+            return ""
+        trans_table = str.maketrans("0123456789", "٠١٢٣٤٥٦٧٨٩")
+        return str(text).translate(trans_table)
+
 
 class ResCountryState(models.Model):
     _inherit = 'res.country.state'

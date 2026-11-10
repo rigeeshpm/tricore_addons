@@ -65,7 +65,7 @@
 
                                 <td colspan="3" style="padding:4px; direction:rtl;
                                            text-align:right; overflow-wrap:anywhere;">
-                                    <span><span t-out="partner_ar.name"/></span>
+                                    <span><span t-field="o.partner_id.name_ar"/> </span>
                                 </td>
                                 <td
                                     style="padding:4px; direction:rtl;
@@ -214,18 +214,19 @@
                                    Region
                                 </td>
                                 <td style="padding:4px; overflow-wrap:anywhere;">
-<!--                                    <span t-out=""/>-->
+                                    <t t-out="o.get_invoice_region()"/>
                                 </td>
                                 <td style="padding:4px; direction:rtl;
                                            text-align:right; overflow-wrap:anywhere;">
+                                     <t t-out="o.get_invoice_region()"/>
                                 </td>
                                 <td style="padding:4px; direction:rtl;
                                            text-align:right; overflow-wrap:anywhere;">
-                                    رقم
+                                   منطقة
                                 </td>
                                 <td style="padding:4px; direction:rtl;
                                            text-align:right; overflow-wrap:anywhere;">
-                                    <span t-field="o.partner_id.vat"/>
+                                    <t t-out="o.partner_id.translate_to_arabic_digits(o.partner_id.vat)" />
                                 </td>
                                 <td style="padding:4px; direction:rtl;
                                            text-align:right; overflow-wrap:anywhere;">
@@ -449,10 +450,10 @@
                         <td rowspan="6"
                             style="text-align:center; vertical-align:middle;">
                             <!-- Replace with your QR code field or image -->
-                            <img t-if="o._l10n_sa_is_legal() and o.l10n_sa_qr_code_str"
+                            <img
                         class="d-block"
                         t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', quote_plus(o.l10n_sa_qr_code_str), 200, 200)"/>
-
+                        <img t-att-src="'/report/barcode/?type=QR&amp;value=%s' % quote_plus(o.l10n_sa_qr_code_str)" width="120" height="120"/>
                         </td>
                         <td> </td>
                         <td><strong>Amount Before Discount</strong></td>

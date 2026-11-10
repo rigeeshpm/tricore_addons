@@ -97,7 +97,7 @@
                             </tr>
                             <tr>
                                 <td>Project Location</td>
-                                <td>
+                                <td> <span t-field="doc.project_location"/>
                                 </td>
                                 <td>Delivery Terms</td>
                                 <td>
@@ -106,7 +106,7 @@
                             </tr>
                             <tr>
                                 <td>Project Name</td>
-                                <td>
+                                <td> <span t-field="doc.project_name"/>
                                 </td>
                                 <td>Name</td>
                                 <td>

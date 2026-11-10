@@ -1,4 +1,4 @@
-from odoo import fields, models
+from odoo import api, fields, models
 
 
 class SaleOrder(models.Model):
@@ -125,7 +125,47 @@ class SaleOrder(models.Model):
         """,
     )
 
+    project_name = fields.Char(
+        string='Project Name',
+        compute='_compute_project_details',
+        store=True
+    )
+
+    project_location = fields.Char(
+        string='Project Location',
+        compute='_compute_project_details',
+        store=True
+    )
+
+    @api.depends('order_line.analytic_distribution')
+    def _compute_project_details(self):
+        project_plan = self.env['account.analytic.plan'].search(
+            [('name', '=ilike', 'Project')],
+            limit=1
+        )
+        for order in self:
+            project_names = set()
+            project_locations = set()
+            if project_plan:
+                for line in order.order_line:
+                    distribution = line.analytic_distribution or {}
+                    for account_ids in distribution:
+                        ids = [
+                            int(account_id)
+                            for account_id in account_ids.split(',')
+                            if account_id
+                        ]
+                        accounts = self.env['account.analytic.account'].browse(ids)
+                        for account in accounts:
+                            if account.plan_id == project_plan:
+                                project_names.add(account.name)
+                                if account.partner_id:
+                                    location = account.partner_id.contact_address
+                                    if location:
+                                        project_locations.add(location)
+            order.project_name = ', '.join(sorted(project_names))
+            order.project_location = ', '.join(sorted(project_locations))
+
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
-
     remarks = fields.Text()

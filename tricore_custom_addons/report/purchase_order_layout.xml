@@ -74,7 +74,7 @@
                     <td style="padding-left:3px;border-left:1px solid black"><span><b>Currency:</b> <span t-field="o.company_id.currency_id"/> </span></td>
                 </tr>
                 <tr>
-                    <td style="border-right:1px solid black;padding-right:3px"><span><b>PAT:</b> </span></td>
+                    <td style="border-right:1px solid black;padding-right:3px"><span><b>VAT: <span t-field="o.partner_id.vat"/></b> </span></td>
                     <td><span><b>Place of Supply:</b> <span t-field="o.partner_id.state_id"/> , <span t-field="o.partner_id.country_id"/> </span></td>
                     <td style="padding-left:3px;border-left:1px solid black"><span><b>Validity:</b>  </span></td>
                 </tr>

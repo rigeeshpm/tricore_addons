@@ -49,19 +49,38 @@
                 </tr>
                 <tr>
                     <td style="border:1px solid black; padding:2px; vertical-align:top;">
-                            <span>Bill To: <span t-field="o.partner_id"/> </span><br/>
-                            <span>Attn: </span><br/>
-                            <span>VAT:  <span t-field="o.company_id.vat"/></span>
+                                <table class="table-borderless">
+                                    <tr>
+                                        <td> Bill To:  </td>
+                                        <td> <span t-field="o.partner_id"/> </td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td> <span t-field="o.partner_id.name_ar"/> </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Attn</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>VAT:  </td>
+                                        <td><span t-field="o.partner_id.vat"/></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td><t t-out="o.partner_id.translate_to_arabic_digits(o.partner_id.vat)" /></td>
+                                    </tr>
+                                </table>
                     </td>
                     <td style="border:1px solid black; padding:2px; vertical-align:top;">
-                            <span>LPO No.: </span><br/>
-                            <span>Delivery Term:  </span><span t-field="o.delivery_term"/> <br/>
+                            <span>LPO No.: </span><span t-field="o.sale_id.client_order_ref"/> <br/>
+                            <span>Delivery Term:  </span><span t-field="o.sale_id.incoterm"/> <br/>
                             <span>Place of Supply:
                                 <span t-field="o.partner_id.state_id.name"/>,
                                 <span t-field="o.partner_id.country_id.name"/></span><br/>
                     </td>
                     <td style="border:1px solid black; padding:2px; vertical-align:top;">
-                            <span>Project: </span><br/>
+                            <span>Project: <span t-field="o.sale_id.project_name"/> </span><br/>
                             <span>Currency: <span t-field="o.company_id.currency_id"/></span><br/>
                             <span>Sales Person: <span t-field="o.sale_id.user_id.name"/> </span>
                     </td>
