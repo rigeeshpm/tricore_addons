@@ -22,22 +22,15 @@
                position="attributes">
              <attribute name="t-call">tricore_custom_addons.custom_external_layout_header</attribute>
         </xpath>
-        <xpath expr="//div[@id='informations']" position="attributes">
-            <attribute name="t-if">False</attribute>
-        </xpath>
-        <xpath expr="//t[@t-set='layout_document_title']" position="replace"/>
-        <!-- Replace the quotation address variable with a 6-row, 4-column details table. -->
-        <xpath expr="//t[@t-set='address']" position="replace">
-            <t t-set="address">
-                <table class="table table-sm table-bordered"
-                       style="width:100%; table-layout:fixed; border-collapse:collapse;
-                              margin:0; padding:0; font-size:10pt;">
+        <xpath expr="//div[@id='informations']" position="before">
+            <table class="table table-sm table-bordered"
+                       style="width:100%; border-collapse:collapse;
+                              margin-bottom:10px; padding:0; font-size:10pt;">
                         <tbody>
                             <tr>
                                 <td colspan="2"
                                     style="text-align:left; background:#eeeeee; padding:5px;">
                                     <h6><b>QUOTATION : #</b><span t-out="doc.name"/></h6>
-
                                 </td>
                                 <td colspan="2" style="text-align:left; background:#eeeeee; padding:5px;">
                                     <h6>Date : <span t-out="doc.date_order" t-options='{"widget": "date"}'/></h6>
@@ -46,26 +39,26 @@
                             <tr>
                                 <td style="width:17%;">Customer</td>
                                 <td style="width:33%;"><span t-field="doc.partner_id.name"/></td>
-                                <td>Address</td>
-                                <td>
+                                <td style="width:17%;">Address</td>
+                                <td style="width:33%;">
                                     <t t-set="shipping" t-value="doc.partner_shipping_id"/>
                                     <!-- Address Fields -->
                                         <span t-if="shipping.street">
                                             <span t-field="shipping.street"/>
-                                        </span><br/>
-                                        <span t-if="shipping.street2">
-                                            <span t-field="shipping.street2"/>
                                         </span>
+                                        <span t-if="shipping.street2">
+                                            ,<span t-field="shipping.street2"/>
+                                        </span>
+                                    <br/>
                                         <span t-if="shipping.x_studio_building">
-                                            ,<span t-field="shipping.x_studio_building"/>
+                                            <span t-field="shipping.x_studio_building"/>
                                         </span>
                                         <span t-if="shipping.x_studio_secondary">
                                             ,<span t-field="shipping.x_studio_secondary"/>
                                         </span>
-                                        <br/>
                                         <span t-if="shipping.city">
-                                            <span t-field="shipping.city"/>
-                                        </span>
+                                            ,<span t-field="shipping.city"/>
+                                        </span><br/>
                                         <span t-if="shipping.state_id">
                                             , <span t-field="shipping.state_id"/>
                                         </span>
@@ -73,49 +66,54 @@
                                             , <span t-if="shipping.zip"
                                                   t-field="shipping.zip"/>
                                         </span>
-                                        <div t-if="shipping.country_id">
-                                            <span t-field="shipping.country_id"/>
-                                        </div>
+                                        <span t-if="shipping.country_id">
+                                            , <span t-field="shipping.country_id"/>
+                                        </span>
                                 </td>
                             </tr>
                             <tr>
-                                <td>Kind Attn</td>
-                                <td><span t-field="doc.user_id"/>
+                                <td style="width:17%;">Kind Attn</td>
+                                <td style="width:33%;"><span t-field="doc.user_id"/>
                                 </td>
-                                <td>Validity</td>
-                                <td><span t-field="doc.validity_date"/></td>
+                                <td style="width:17%;">Validity</td>
+                                <td style="width:33%;"><span t-field="doc.validity_date"/></td>
                             </tr>
                             <tr>
-                                <td>TRN</td>
-                                <td> <span t-field="doc.partner_id.vat"/>
+                                <td style="width:17%;">TRN</td>
+                                <td style="width:33%;"> <span t-field="doc.partner_id.vat"/>
                                 </td>
-                                <td>ETA</td>
-                                <td>
+                                <td style="width:17%;">ETA</td>
+                                <td style="width:33%;">
                                     <span t-field="doc.expected_date" t-options='{"widget": "date"}'/>
                                 </td>
                             </tr>
                             <tr>
-                                <td>Project Location</td>
-                                <td> <span t-field="doc.project_location"/>
+                                <td style="width:17%;">Project Location</td>
+                                <td style="width:33%;"> <span t-field="doc.project_location"/>
                                 </td>
-                                <td>Delivery Terms</td>
-                                <td>
+                                <td style="width:17%;">Delivery Terms</td>
+                                <td style="width:33%;">
                                     <span t-field="doc.incoterm"/>
                                 </td>
                             </tr>
                             <tr>
-                                <td>Project Name</td>
-                                <td> <span t-field="doc.project_name"/>
+                                <td style="width:17%;">Project Name</td>
+                                <td style="width:33%;"> <span t-field="doc.project_name"/>
                                 </td>
-                                <td>Name</td>
-                                <td>
+                                <td style="width:17%;">Name</td>
+                                <td style="width:33%;">
                                     <span t-field="doc.user_id"/>
                                 </td>
                             </tr>
                         </tbody>
                 </table>
-            </t>
         </xpath>
+        <xpath expr="//div[@id='informations']" position="attributes">
+            <attribute name="t-if">False</attribute>
+        </xpath>
+        <xpath expr="//t[@t-set='layout_document_title']" position="replace"/>
+        <!-- Replace the quotation address variable with a 6-row, 4-column details table. -->
+        <xpath expr="//t[@t-set='address']" position="replace"/>
         <!-- ..........sale order line table start................      -->
         <!--        no need to show tax column. so we set hide_taxes_details=True-->
         <xpath expr="//t[@t-set='hide_taxes_details']" position="replace">

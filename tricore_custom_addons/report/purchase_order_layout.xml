@@ -37,45 +37,63 @@
         </xpath>
 <!--        new information block-->
         <xpath expr="//div[@id='informations']" position="replace">
-            <table class="table table-sm table-borderless"
-                   style="width:100%; table-layout:fixed;
-                          page-break-inside: avoid;
-                          break-inside: avoid;margin-left:0px !important;margin-right:0px !important
-                          border-collapse:collapse; font-size:10pt; margin-top:0px !important ">
+            <table style="width:100%;
+                          border-collapse:collapse;
+                          table-layout:fixed;
+                          margin-bottom:15px;
+                          font-size:11pt;">
+                <colgroup>
+                    <col style="width:35%;"/>
+                    <col style="width:35%;"/>
+                    <col style="width:30%;"/>
+                </colgroup>
+                <!-- FIRST ROW: All cells have full borders -->
                 <tr>
-                    <td style="border-right:1px solid black;padding-right:3px">
-                        <div style="padding:2px;border:1px solid black">
-                            <b>PURCHASE ORDER</b>
-                        </div>
+                    <td style="border:1px solid #000; padding:5px;">
+                        <strong>PURCHASE ORDER</strong>
                     </td>
-                    <td  style="padding-left:3px;padding-right:3px">
-                         <div style="padding:2px;border:1px solid black">
-                            <span>Doc # <span t-field="o.name"/></span>
-                        </div>
-
+                    <td style="border:1px solid #000; padding:5px;">
+                        <strong>Doc # <span t-field="o.name"/> </strong>
                     </td>
-                    <td style="padding-left:3px;border-left:1px solid black">
-                        <div style="padding:2px;border:1px solid black">
-                           <span>Date: <span t-field="o.date_approve" t-options='{"widget": "date"}'/></span>
-                        </div>
+                    <td style="border:1px solid #000; padding:5px;">
+                         <strong>Date: <span t-field="o.date_approve" t-options='{"widget": "date"}'/></strong>
                     </td>
                 </tr>
+                <!-- SECOND ROW: Column partitions only, no row partitions -->
                 <tr>
-                    <td style="border-right:1px solid black;padding-right:3px">
+                    <td style="border-right: 1px solid #000; border-top: none; border-bottom: none; border-left:1px solid #000 ; padding:3px;">
                         <span><b>Bill To: </b><span t-field="o.partner_id"/> </span>
                     </td>
-                    <td><span><b>Payment Term:</b> <span t-field="o.payment_term_id"/></span></td>
-                    <td style="padding-left:3px;border-left:1px solid black"><span><b>ETD: </b><span t-field="o.date_planned" t-options='{"widget": "date"}'/></span></td>
+                    <td style="border-right: 1px solid #000; border-top: none; border-bottom: none; border-left:1px solid #000; padding:3px;">
+                        <span><b>Payment Term:</b> <span t-field="o.payment_term_id"/></span>
+                    </td>
+                    <td style="border-right: 1px solid #000; border-top: none; border-bottom: none; border-left:1px solid #000;padding:3px;">
+                        <span><b>ETD: </b><span t-field="o.date_planned" t-options='{"widget": "date"}'/></span>
+                    </td>
                 </tr>
+                <!-- THIRD ROW -->
                 <tr>
-                    <td style="border-right:1px solid black;padding-right:3px"><span><b>Attn: </b><span t-field="o.user_id"/> </span></td>
-                    <td><span><b>Delivery Term:</b><span t-field="o.incoterm_id"/> </span></td>
-                    <td style="padding-left:3px;border-left:1px solid black"><span><b>Currency:</b> <span t-field="o.company_id.currency_id"/> </span></td>
+                    <td style="border-right: 1px solid #000; border-top: none; border-bottom: none; border-left:1px solid #000;padding:3px;">
+                        <span><b>Attn: </b><span t-field="o.user_id"/> </span>
+                    </td>
+                    <td style="border-right: 1px solid #000; border-top: none; border-bottom: none; border-left:1px solid #000;padding:3px;">
+                        <span><b>Delivery Term:</b><span t-field="o.incoterm_id"/> </span>
+                    </td>
+                    <td style="border-right: 1px solid #000; border-top: none; border-bottom: none; border-left:1px solid #000;padding:3px;">
+                        <span><b>Currency:</b> <span t-field="o.company_id.currency_id"/> </span>
+                    </td>
                 </tr>
+                <!-- FOURTH ROW -->
                 <tr>
-                    <td style="border-right:1px solid black;padding-right:3px"><span><b>VAT: <span t-field="o.partner_id.vat"/></b> </span></td>
-                    <td><span><b>Place of Supply:</b> <span t-field="o.partner_id.state_id"/> , <span t-field="o.partner_id.country_id"/> </span></td>
-                    <td style="padding-left:3px;border-left:1px solid black"><span><b>Validity:</b> <span t-field="o.date_promised" t-options='{"widget": "date"}'/> </span></td>
+                    <td style="border-right: 1px solid #000; border-top: none; border-bottom:1px solid #000; border-left:1px solid #000;padding:3px;">
+                        <span><b>VAT: <span t-field="o.partner_id.vat"/></b> </span>
+                    </td>
+                    <td style="border-right: 1px solid #000; border-top: none; border-bottom:1px solid #000; border-left:1px solid #000;padding:3px;">
+                        <span><b>Place of Supply:</b> <span t-field="o.partner_id.state_id"/> , <span t-field="o.partner_id.country_id"/> </span>
+                    </td>
+                    <td style="border-right: 1px solid #000; border-top: none; border-bottom:1px solid #000; border-left:1px solid #000;padding:3px;">
+                        <span><b>Validity:</b> <span t-field="o.date_promised" t-options='{"widget": "date"}'/> </span>
+                    </td>
                 </tr>
             </table>
         </xpath>
