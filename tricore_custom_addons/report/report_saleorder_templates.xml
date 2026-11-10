@@ -43,31 +43,29 @@
                                 <td style="width:33%;">
                                     <t t-set="shipping" t-value="doc.partner_shipping_id"/>
                                     <!-- Address Fields -->
-                                        <span t-if="shipping.street">
-                                            <span t-field="shipping.street"/>
-                                        </span>
-                                        <span t-if="shipping.street2">
-                                            ,<span t-field="shipping.street2"/>
-                                        </span>
-                                    <br/>
                                         <span t-if="shipping.x_studio_building">
-                                            <span t-field="shipping.x_studio_building"/>
+                                            <span t-field="shipping.x_studio_building"/>,
+                                        </span>
+                                        <span t-if="shipping.street">
+                                            <span t-field="shipping.street"/>,
                                         </span>
                                         <span t-if="shipping.x_studio_secondary">
-                                            ,<span t-field="shipping.x_studio_secondary"/>
+                                            <span t-field="shipping.x_studio_secondary"/>,
+                                        </span>
+                                        <span t-if="shipping.street2">
+                                            <span t-field="shipping.street2"/>,
+                                        </span>
+                                        <span t-if="shipping.zip">
+                                             <span t-field="shipping.zip"/>,
                                         </span>
                                         <span t-if="shipping.city">
-                                            ,<span t-field="shipping.city"/>
-                                        </span><br/>
-                                        <span t-if="shipping.state_id">
-                                            , <span t-field="shipping.state_id"/>
+                                            <span t-field="shipping.city"/>,
                                         </span>
-                                        <span>
-                                            , <span t-if="shipping.zip"
-                                                  t-field="shipping.zip"/>
+                                        <span t-if="shipping.state_id">
+                                            <span t-field="shipping.state_id"/>,
                                         </span>
                                         <span t-if="shipping.country_id">
-                                            , <span t-field="shipping.country_id"/>
+                                            <span t-field="shipping.country_id"/>
                                         </span>
                                 </td>
                             </tr>
