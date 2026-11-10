@@ -49,26 +49,26 @@
                 </tr>
                 <tr>
                     <td style="border:1px solid black; padding:2px; vertical-align:top;">
-                                <table class="table-borderless">
-                                    <tr>
-                                        <td> Bill To:  </td>
-                                        <td> <span t-field="o.partner_id"/> </td>
+                                <table class="table-borderless" style="width: 100%; border-collapse: collapse; border: none !important;">
+                                    <tr style="border: none !important;">
+                                        <td style="border: none !important;"> Bill To:  </td>
+                                        <td style="border: none !important;"> <span t-field="o.partner_id"/> </td>
                                     </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td> <span t-field="o.partner_id.name_ar"/> </td>
+                                    <tr style="border: none !important;">
+                                        <td style="border: none !important;"></td>
+                                        <td style="border: none !important;"> <span t-field="o.partner_id.name_ar"/> </td>
                                     </tr>
-                                    <tr>
-                                        <td>Attn</td>
-                                        <td></td>
+                                    <tr style="border: none !important;">
+                                        <td style="border: none !important;">Attn: </td>
+                                        <td style="border: none !important;"></td>
                                     </tr>
-                                    <tr>
-                                        <td>VAT:  </td>
-                                        <td><span t-field="o.partner_id.vat"/></td>
+                                    <tr style="border: none !important;">
+                                        <td style="border: none !important;">VAT:  </td>
+                                        <td style="border: none !important;"><span t-field="o.partner_id.vat"/></td>
                                     </tr>
-                                    <tr>
-                                        <td></td>
-                                        <td><t t-out="o.partner_id.translate_to_arabic_digits(o.partner_id.vat)" /></td>
+                                    <tr style="border: none !important;">
+                                        <td style="border: none !important;"></td>
+                                        <td style="border: none !important;"><t t-out="o.partner_id.translate_to_arabic_digits(o.partner_id.vat)" /></td>
                                     </tr>
                                 </table>
                     </td>

@@ -1,0 +1,20 @@
+{
+    "name": "Customer Sequence | Vendor Sequence",
+    "version": "20.1",
+    "sequence": 1,
+    "category": "Sales/Purchases",
+    "author": "Ishan Incubator",
+    "website": "https://ishan-incubator.odoo.com/",
+    "license": "LGPL-3",
+    "summary": "Generate sequential numbers for customers and vendors.",
+    "description": """Generate sequential numbers for customers and vendors.""",
+    "depends": ["sale_management", "purchase"],
+    "data": [
+        "data/sequence.xml",
+        "views/res_partner.xml",
+    ],
+    "auto_install": False,
+    "installable": True,
+    "application": True,
+    "images": ["static/src/img/Banner.jpg"],
+}

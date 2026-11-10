@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="customer_partner_form_inherit" model="ir.ui.view">
+        <field name="name">res.partner.form.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet//h1" position="after">
+                <div class="d-flex align-items-baseline gap-2" invisible="not code">
+                    <strong>Code:</strong>
+                    <field name="code" readonly="1"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="customer_partner_tree_inherit" model="ir.ui.view">
+        <field name="name">res.partner.list.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='display_name']" position="before">
+                <field name="code" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="customer_partner_kanban_inherit" model="ir.ui.view">
+        <field name="name">res.partner.kanban.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.res_partner_kanban_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//t[@t-name='card']//field[@name='name']" position="before">
+                <field name="code" invisible="not code"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="ii_partner_sequence_server_action" model="ir.actions.server">
+        <field name="name">Customer/Vendor Code</field>
+        <field name="type">ir.actions.server</field>
+        <field name="model_id" ref="model_res_partner"/>
+        <field name="binding_model_id" ref="model_res_partner"/>
+        <field name="state">code</field>
+        <field name="code">model.generate_partner_sequence(records)</field>
+    </record>
+
+    <record id="ii_partner_sequence_search_view" model="ir.ui.view">
+        <field name="name">partner.sequence.search.view</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="code" string="Customer/Vendor Code"/>
+            </xpath>
+            <xpath expr="//filter[@name='group_country']" position="after">
+                <filter name="code" string="Customer/Vendor Code" context="{'group_by': 'code'}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
