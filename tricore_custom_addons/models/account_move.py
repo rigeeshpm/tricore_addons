@@ -5,18 +5,30 @@ class AccountMove(models.Model):
 
     def get_invoice_region(self):
         self.ensure_one()
+        region_plan = self.env['account.analytic.plan'].search(
+            [('name', '=ilike', 'Region')],
+            limit=1
+        )
+        if not region_plan:
+            return ""
+
+        # Collect all unique account IDs across all invoice lines
+        account_ids = set()
         for line in self.invoice_line_ids:
             if not line.analytic_distribution:
                 continue
-            # Extract analytic account IDs from the line's distribution dictionary
-            account_ids = [int(acc_id) for acc_id in line.analytic_distribution.keys()]
-            if not account_ids:
-                continue
-            # Search for an account belonging to the 'Region' plan
-            region_account = self.env['account.analytic.account'].search([
-                ('id', 'in', account_ids),
-                ('plan_id.name', 'ilike', 'region')
-            ], limit=1)
-            if region_account:
-                return region_account.name
-        return ""
+            for key in line.analytic_distribution.keys():
+                for acc_id in key.split(','):
+                    if acc_id.isdigit():
+                        account_ids.add(int(acc_id))
+
+        if not account_ids:
+            return ""
+
+        # Find the first account matching the 'Region' plan
+        region_account = self.env['account.analytic.account'].search([
+            ('id', 'in', list(account_ids)),
+            ('plan_id', '=', region_plan.id)
+        ], limit=1)
+
+        return region_account.name if region_account else ""

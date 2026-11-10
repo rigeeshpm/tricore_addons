@@ -137,34 +137,45 @@ class SaleOrder(models.Model):
         store=True
     )
 
-    @api.depends('order_line.analytic_distribution')
-    def _compute_project_details(self):
-        project_plan = self.env['account.analytic.plan'].search(
-            [('name', '=ilike', 'Project')],
-            limit=1
-        )
-        for order in self:
-            project_names = set()
-            project_locations = set()
-            if project_plan:
-                for line in order.order_line:
-                    distribution = line.analytic_distribution or {}
-                    for account_ids in distribution:
-                        ids = [
-                            int(account_id)
-                            for account_id in account_ids.split(',')
-                            if account_id
-                        ]
-                        accounts = self.env['account.analytic.account'].browse(ids)
+    from odoo import api, models
+
+    class SaleOrder(models.Model):
+        _inherit = 'sale.order'
+
+        @api.depends('order_line.analytic_distribution')
+        def _compute_project_details(self):
+            project_plan = self.env['account.analytic.plan'].search(
+                [('name', '=ilike', 'Project')],
+                limit=1
+            )
+            for order in self:
+                project_names = set()
+                project_locations = set()
+
+                if project_plan:
+                    # Collect all account IDs from all lines for this order
+                    account_ids = set()
+                    for line in order.order_line:
+                        if not line.analytic_distribution:
+                            continue
+                        for key in line.analytic_distribution.keys():
+                            for acc_id in key.split(','):
+                                if acc_id.isdigit():
+                                    account_ids.add(int(acc_id))
+
+                    if account_ids:
+                        # Fetch accounts that belong specifically to the 'Project' plan
+                        accounts = self.env['account.analytic.account'].search([
+                            ('id', 'in', list(account_ids)),
+                            ('plan_id', '=', project_plan.id)
+                        ])
                         for account in accounts:
-                            if account.plan_id == project_plan:
-                                project_names.add(account.name)
-                                if account.partner_id:
-                                    location = account.partner_id.contact_address
-                                    if location:
-                                        project_locations.add(location)
-            order.project_name = ', '.join(sorted(project_names))
-            order.project_location = ', '.join(sorted(project_locations))
+                            project_names.add(account.name)
+                            if account.partner_id and account.partner_id.contact_address:
+                                project_locations.add(account.partner_id.contact_address)
+
+                order.project_name = ', '.join(sorted(project_names))
+                order.project_location = ', '.join(sorted(project_locations))
 
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
