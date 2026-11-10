@@ -4,6 +4,7 @@ from odoo import api, fields, models
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
+    remark = fields.Text()
     project_name = fields.Char(
         string='Project Name',
         compute='_compute_project_details',

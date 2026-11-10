@@ -40,10 +40,9 @@
 
                                 </td>
                                 <td colspan="2" style="text-align:left; background:#eeeeee; padding:5px;">
-                                    <h6>Date : <span t-out="doc.date_order"/></h6>
+                                    <h6>Date : <span t-out="doc.date_order" t-options='{"widget": "date"}'/></h6>
                                 </td>
                             </tr>
-
                             <tr>
                                 <td style="width:17%;">Customer</td>
                                 <td style="width:33%;"><span t-field="doc.partner_id.name"/></td>
@@ -81,7 +80,7 @@
                             </tr>
                             <tr>
                                 <td>Kind Attn</td>
-                                <td>
+                                <td><span t-field="doc.user_id"/>
                                 </td>
                                 <td>Validity</td>
                                 <td><span t-field="doc.validity_date"/></td>
@@ -92,7 +91,7 @@
                                 </td>
                                 <td>ETA</td>
                                 <td>
-                                    <span t-field="doc.expected_date"/>
+                                    <span t-field="doc.expected_date" t-options='{"widget": "date"}'/>
                                 </td>
                             </tr>
                             <tr>
@@ -200,6 +199,7 @@
                                 <strong>Noted/Remarks :-</strong>
                             </div>
                             <div style="margin-left:30%; margin-top:3px;">
+                                <span t-field="doc.remark"/>
                             </div>
                         </div>
                         <!-- Payment Terms -->

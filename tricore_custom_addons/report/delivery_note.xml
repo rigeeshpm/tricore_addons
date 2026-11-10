@@ -60,7 +60,7 @@
                                     </tr>
                                     <tr style="border: none !important;">
                                         <td style="border: none !important;">Attn: </td>
-                                        <td style="border: none !important;"></td>
+                                        <td style="border: none !important;"><span t-field="o.user_id"/></td>
                                     </tr>
                                     <tr style="border: none !important;">
                                         <td style="border: none !important;">VAT:  </td>
@@ -144,35 +144,6 @@
                 </tbody>
             </table>
         </xpath>
-
-         <!--        modifies the delivery lines table (stock.move.line) for deliveries which are  confirmed-->
-
-<!--        <xpath expr="//th[@name='th_sml_product']" position="replace">-->
-<!--            <th name="th_sml_product" style="text-align:center;width:200px !important;">Description</th>-->
-<!--        </xpath>-->
-<!--        <xpath expr="//th[@name='th_sml_product']" position="before">-->
-<!--            <th name="th_si_no"-->
-<!--                style="width: 7% !important; min-width: 7% !important; max-width: 7% !important; white-space: nowrap;"-->
-<!--                t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">-->
-<!--                <span>Sr No.</span>-->
-<!--                <t t-set="line_index" t-value="0"/>-->
-<!--            </th>-->
-<!--            <th name="th_name"-->
-<!--                style="white-space: nowrap;text-align:center"-->
-<!--                t-attf-class="{{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}">-->
-<!--                <span>Item Code</span>-->
-<!--            </th>-->
-<!--        </xpath>-->
-<!--        <xpath expr="//th[@name='lot_serial']" position="replace"/>-->
-<!--        <xpath expr="//th[@name='th_sml_quantity']" position="replace"/>-->
-<!--        <xpath expr="//th[@name='th_sml_qty_ordered']" position="replace">-->
-<!--            <th name="th_sml_quantity" style="width:75px !important;text-align:center">Quantity</th>-->
-<!--            <th name="th_uom" style="text-align:center" >UoM</th>-->
-<!--            <th name="lot_serial" style="text-align:center" t-if="has_serial_number">-->
-<!--                                    Lot/Serial Number-->
-<!--            </th>-->
-<!--            <th name="th_remarks" style="text-align:center" >Remarks</th>-->
-<!--        </xpath>-->
         <!--replaces the signature section-->
         <xpath expr="//div[@name='signature']"
            position="replace">
@@ -261,82 +232,15 @@
                         Terms &amp; Conditions
                     </strong>
                     <span t-field="o.note"/>
-
                 </div>
                 <!-- Chemical Goods Notice -->
                 <div style="margin-top:25px;
                             color:red;
                             font-size:15pt;">
-
                     Chemical goods once delivered or sold cannot be returned
                     or replaced
                 </div>
             </div>
         </xpath>
-    <!-- Add custom footer after delivery lines -->
     </template>
-
-<!--    for confirmed delivery without LOT/serial no-->
-<!--    <template id="report_delivery_aggregated"-->
-<!--          inherit_id="stock.stock_report_delivery_aggregated_move_lines">-->
-<!--        <xpath expr="//td[1]" position="before">-->
-<!--            <td name="td_index" style="text-align:center; width:5%;">-->
-<!--                <t t-set="line_index" t-value="line_index+1"/>-->
-<!--                <span t-out="line_index"/>-->
-<!--            </td>-->
-<!--            <td name="td_name" style="text-align:left; width:5%;">-->
-<!--                <span t-out="o.product_id.default_code"/>-->
-<!--            </td>-->
-<!--        </xpath>-->
-<!--        <xpath expr="//td[@name='move_line_aggregated_quantity']" position="replace"/>-->
-<!--        <xpath expr="//td[@name='move_line_aggregated_qty_ordered']" position="replace">-->
-<!--             <td style="text-align:center" name="move_line_aggregated_quantity">-->
-<!--                <span t-out="format_number(aggregated_lines[line]['quantity'])"/>-->
-<!--                <t t-if="aggregated_lines[line]['packaging_uom_id'] != aggregated_lines[line]['uom_id']" groups="uom.group_uom">-->
-<!--                    <br/>-->
-<!--                    <span class="text-muted" t-out="aggregated_lines[line]['packaging_quantity']">1.00</span>-->
-<!--                    <span class="text-muted" t-out="aggregated_lines[line]['packaging_uom_id'].name">Pack of 6</span>-->
-<!--                </t>-->
-<!--            </td>-->
-<!--            <td name="td_uom" style="text-align:center">-->
-<!--                <span t-out="aggregated_lines[line]['uom_id'].name"/>-->
-<!--            </td>-->
-<!--            <td name="td_remark" style="text-align:center;">-->
-<!--                <span></span>-->
-<!--            </td>-->
-<!--        </xpath>-->
-<!--    </template>-->
-<!--    &lt;!&ndash;    for confirmed delivery with LOT/serial no&ndash;&gt;-->
-<!--    <template id="stock_report_delivery_has_serial_move_line"-->
-<!--          inherit_id="stock.stock_report_delivery_has_serial_move_line">-->
-<!--        <xpath expr="//td[1]" position="before">-->
-<!--            <td name="td_index" style="text-align:center; width:5%;">-->
-<!--                <t t-set="line_index" t-value="line_index+1"/>-->
-<!--                <span t-out="line_index"/>-->
-<!--            </td>-->
-<!--            <td name="td_name" style="text-align:left; width:5%;">-->
-<!--                <span t-out="o.product_id.default_code"/>-->
-<!--            </td>-->
-<!--        </xpath>-->
-<!--        <xpath expr="//t[@name='move_line_lot']" position="replace"/>-->
-<!--        <xpath expr="//td[@name='move_line_lot_quantity']" position="replace">-->
-<!--            <td name="move_line_lot_quantity" style="text-align:center">-->
-<!--                <span t-out="format_number(move_line.quantity)"/>-->
-<!--                <t t-if="move_line.move_id.packaging_uom_id != move_line.uom_id">-->
-<!--                    <br/>-->
-<!--                    <span class="text-muted" t-out="move_line.uom_id._compute_quantity(move_line.quantity, move_line.move_id.packaging_uom_id)">1.00</span>-->
-<!--                    <span class="text-muted" t-field="move_line.move_id.packaging_uom_id">Pack of 6</span>-->
-<!--                </t>-->
-<!--            </td>-->
-<!--            <td name="td_uom" style="text-align:center">-->
-<!--               <span t-field="move_line.uom_id"/>-->
-<!--            </td>-->
-<!--            <t t-if="has_serial_number" name="move_line_lot">-->
-<!--                <td class="text-end"><span t-field="move_line.lot_id.name"/></td>-->
-<!--            </t>-->
-<!--            <td name="td_remark" style="text-align:center;">-->
-<!--                <span t-field="move.remark"/>-->
-<!--            </td>-->
-<!--        </xpath>-->
-<!--    </template>-->
 </odoo>
