@@ -385,7 +385,7 @@
             </th>
          </xpath>
         <xpath expr="//td[@name='td_subtotal']" position="replace">
-            <td name="td_net_amount">
+            <td name="td_net_amount" class="text-end">
                  <span t-field="line.price_total"
                   t-options="{'widget': 'monetary',
                               'display_currency':o.currency_id}"/>
