@@ -310,8 +310,7 @@
                     * index */
                     table.invoice-lines-cell-borders th[name='th_name'],
                     table.invoice-lines-cell-borders td[name='product_name'] {
-                        width: 200px !important;
-                        min-width: 0 !important;
+                        min-width: 200px !important;
                         white-space: normal !important;
                         overflow-wrap: break-word;
                     }

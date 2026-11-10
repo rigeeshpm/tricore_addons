@@ -92,7 +92,7 @@
                         <span>#</span>
                         <t t-set="line_index" t-value="0"/>
                     </th>
-                    <th name="th_name"
+                    <th name="th_item_code"
                         style="min-width: 100px !important;max-width: 100px !important; white-space: nowrap;">
                         <span>Item Code</span>
                     </th>
