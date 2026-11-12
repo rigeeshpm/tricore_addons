@@ -159,7 +159,7 @@
         <xpath expr="//p[@t-field='o.note']" position="replace"/>
         <!-- Replace the existing totals section with the custom footer -->
         <xpath expr="//div[@id='total']" position="replace">
-            <div id="total" class="row mt-3"
+            <div id="total" class="row"
                  style="font-size: 13px;">
                 <!-- LEFT SECTION -->
                 <div class="col-7">
@@ -178,13 +178,6 @@
                         <div class="col-12">
                             <strong>Narration :</strong>
                         </div>
-                    </div>
-                    <!-- Terms and Conditions -->
-                    <div class="mt-5">
-                        <div class="mb-1">
-                            <strong>Terms &amp; Conditions</strong>
-                        </div>
-                        <span t-field="o.note"/>
                     </div>
                 </div>
                 <!-- RIGHT SECTION -->
@@ -264,7 +257,6 @@
                                                   'display_currency': o.currency_id}"/>
                                         </td>
                                     </tr>
-
                                     <tr>
                                         <td style="border: 1px solid black;
                                                    padding: 8px;">
@@ -273,7 +265,6 @@
                                                   'display_currency': o.currency_id}"/>
                                         </td>
                                     </tr>
-
                                     <tr>
                                         <td style="border: 1px solid black;
                                                    padding: 8px;">
@@ -284,56 +275,51 @@
                                             </strong>
                                         </td>
                                     </tr>
-
                                 </tbody>
-
                             </table>
                         </div>
-
                     </div>
-                    <!-- Signature Section -->
-                    <div class="row mt-2"
-                         style="border: 1px solid black;
-                                min-height: 200px;
-                                text-align: center;">
-                        <div class="col-4"
-                             style="border-right: 1px solid black;
-                                    padding-top: 180px;">
-                            <div style="border-top: 1px solid black;
-                                        margin: 0 10px;
-                                        padding-top: 5px;">
-                                <strong>Prepared By</strong>
-                            </div>
-                        </div>
-                        <div class="col-4"
-                             style="border-right: 1px solid black;
-                                    padding-top: 180px;">
-
-                            <div style="border-top: 1px solid black;
-                                        margin: 0 10px;
-                                        padding-top: 5px;">
-                                <strong>Verify By</strong>
-                            </div>
-
-                        </div>
-
-                        <div class="col-4"
-                             style="padding-top: 180px;">
-
-                            <div style="border-top: 1px solid black;
-                                        margin: 0 10px;
-                                        padding-top: 5px;">
-                                <strong>Approved By</strong>
-                            </div>
-
-                        </div>
-
-                    </div>
-
                 </div>
-
             </div>
-
+            <div id="signature" class="row"
+                 style="font-size: 13px;margin-top:3px">
+                <t t-set="primary_color" t-value="o.company_id.primary_color or '#000000'"/>
+                <table class="table-borderless">
+                    <tr style="border:none !important">
+                        <td style="border:none !important;vertical-align:bottom;width:50% !important">
+                            <strong>Terms &amp; Conditions</strong>
+                            <span t-field="o.note"/>
+                        </td>
+                        <td style="border:none !important;vertical-align:bottom;width:40% !important">
+                            <div class="row mt-2" t-attf-style="border: 1px solid #{primary_color}; min-height: 200px;
+                                    text-align: center;">
+                               <div class="col-4"  t-attf-style="border-right: 1px solid #{primary_color}; padding-top: 210px;">
+                                    <div style="border-top: 1px solid black;
+                                                margin: 0 10px;
+                                                padding-top: 5px;">
+                                        <strong>Prepared By</strong>
+                                    </div>
+                                </div>
+                                <div class="col-4" t-attf-style="border-right: 1px solid #{primary_color}; padding-top: 210px;">
+                                    <div style="border-top: 1px solid black;
+                                                margin: 0 10px;
+                                                padding-top: 5px;">
+                                        <strong>Verify By</strong>
+                                    </div>
+                                </div>
+                                <div class="col-4"
+                                     style="padding-top: 210px;">
+                                    <div style="border-top: 1px solid black;
+                                                margin: 0 10px;
+                                                padding-top: 5px;">
+                                        <strong>Approved By</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </xpath>
     </template>
 </odoo>
