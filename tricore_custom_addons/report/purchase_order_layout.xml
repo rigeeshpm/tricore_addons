@@ -74,7 +74,7 @@
                 <!-- THIRD ROW -->
                 <tr>
                     <td style="border-right: 1px solid #000; border-top: none; border-bottom: none; border-left:1px solid #000;padding:3px;">
-                        <span><b>Attn: </b><span t-field="o.user_id"/> </span>
+                        <span><b>Attn: </b> </span>
                     </td>
                     <td style="border-right: 1px solid #000; border-top: none; border-bottom: none; border-left:1px solid #000;padding:3px;">
                         <span><b>Delivery Term:</b><span t-field="o.incoterm_id"/> </span>
@@ -92,7 +92,7 @@
                         <span><b>Place of Supply:</b> <span t-field="o.partner_id.state_id"/> , <span t-field="o.partner_id.country_id"/> </span>
                     </td>
                     <td style="border-right: 1px solid #000; border-top: none; border-bottom:1px solid #000; border-left:1px solid #000;padding:3px;">
-                        <span><b>Validity:</b> <span t-field="o.date_promised" t-options='{"widget": "date"}'/> </span>
+                        <span><b>Validity:</b> </span>
                     </td>
                 </tr>
             </table>
@@ -286,7 +286,7 @@
                 <t t-set="primary_color" t-value="o.company_id.primary_color or '#000000'"/>
                 <table class="table-borderless">
                     <tr style="border:none !important">
-                        <td style="border:none !important;vertical-align:bottom;width:50% !important">
+                        <td style="border:none !important;vertical-align:bottom;width:60% !important">
                             <strong>Terms &amp; Conditions</strong>
                             <span t-field="o.note"/>
                         </td>
