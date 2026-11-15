@@ -100,7 +100,7 @@
                                 </td>
                                 <td style="width:17%;">Name</td>
                                 <td style="width:33%;">
-                                    <span t-field="doc.user_id"/>
+                                    <span t-field="doc.salesman"/>
                                 </td>
                             </tr>
                         </tbody>
