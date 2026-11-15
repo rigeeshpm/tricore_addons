@@ -141,7 +141,9 @@ class MxVoucherLines(models.Model):
 	_description = 'Payment Voucher Line'
 
 	voucher_id = fields.Many2one('mx.payment.voucher', ondelete='cascade')
-	account_id = fields.Many2one('account.account')
+	account_id = fields.Many2one(
+		'account.account',
+		string="Account")
 	partner_id = fields.Many2one('res.partner')
 	tax = fields.Many2one('account.tax')
 	tax_amount = fields.Float(compute='_get_tax_amount')

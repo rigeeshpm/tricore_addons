@@ -45,10 +45,19 @@
                             <tr>
                                 <th colspan="4"
                                     style="text-align:left; background:#eeeeee; padding:5px;">
-                                    <h6><b>Tax Invoice : #</b><span t-out="o.name"/></h6>
-
+                                    <t t-if="o.move_type=='out_invoice'">
+                                        <h6><b>Tax Invoice : #</b><span t-out="o.name"/></h6>
+                                    </t>
+                                    <t t-if="o.move_type=='in_invoice'">
+                                        <h6><span t-out="o.name"/></h6>
+                                    </t>
                                 </th>
                                 <th colspan="4" style="text-align:left; background:#eeeeee; padding:5px;">
+                                    <t t-if="o.move_type=='in_invoice'">
+                                        <t t-set="purchase_orders"
+           t-value="o.invoice_line_ids.mapped('purchase_line_id.order_id')"/>
+                                        <h6>PO : <span t-out="', '.join(purchase_orders.mapped('name'))"/> </h6>
+                                    </t>
                                     <h6>Date : <span t-out="o.invoice_date"/></h6>
                                 </th>
                             </tr>
@@ -246,41 +255,42 @@
             <t t-set="pickings" t-value="sale_orders.picking_ids.filtered(lambda p: p.state == 'done')"/>
             <div class="row"
                  style="width:100%; margin:0; padding:0;">
-                <table class="table table-sm table-bordered"
-                       style="width:100%; table-layout:fixed;margin-top:10px !important;margin-bottom:0px !important;
-                              border-collapse:collapse; font-size:10pt;">
-                    <thead>
-                        <tr>
-                            <th>Contract / PO No.</th>
-                            <th>Project</th>
-                            <th colspan="2">Payment Terms</th>
-                            <th>L-Delivery Notes</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <tr style="min-height:50px;">
-                            <td>
-                                <t t-if="sale_orders">
-                                    <t t-out="sale_orders[0].client_order_ref"/>
-                                </t>
-                            </td>
-                            <td>
-                                <t t-if="sale_orders">
-                                    <t t-out="sale_orders[0].project_name"/>
-                                </t>
-                            </td>
-                            <td colspan="2">
-                                <span t-field="o.invoice_payment_term_id"/>
-                            </td>
-                            <td>
-                                 <t t-if="pickings">
-                                    <t t-out="pickings[0].name"/>
-                                </t>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <t t-if="o.move_type=='out_invoice'">
+                    <table class="table table-sm table-bordered"
+                           style="width:100%; table-layout:fixed;margin-top:10px !important;margin-bottom:0px !important;
+                                  border-collapse:collapse; font-size:10pt;">
+                        <thead>
+                            <tr>
+                                <th>Contract / PO No.</th>
+                                <th>Project</th>
+                                <th colspan="2">Payment Terms</th>
+                                <th>L-Delivery Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="min-height:50px;">
+                                <td>
+                                    <t t-if="sale_orders">
+                                        <t t-out="sale_orders[0].client_order_ref"/>
+                                    </t>
+                                </td>
+                                <td>
+                                    <t t-if="sale_orders">
+                                        <t t-out="sale_orders[0].project_name"/>
+                                    </t>
+                                </td>
+                                <td colspan="2">
+                                    <span t-field="o.invoice_payment_term_id"/>
+                                </td>
+                                <td>
+                                     <t t-if="pickings">
+                                        <t t-out="pickings[0].name"/>
+                                    </t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </t>
             </div>
         </xpath>
           <!-- Remove the default payment terms section -->
@@ -437,8 +447,18 @@
                             style="text-align:center; vertical-align:middle;">
                             <!-- Replace with your QR code field or image -->
                             <img t-if="o._l10n_sa_is_legal() and o.l10n_sa_qr_code_str"
-                        class="d-block"
-                        t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', quote_plus(o.l10n_sa_qr_code_str), 200, 200)"/>
+                                class="d-block"
+                                t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', quote_plus(o.l10n_sa_qr_code_str), 200, 200)"/>
+                            <t t-else="">
+                                <t t-set="portal_qr_code" t-value="o._generate_portal_payment_qr()"/>
+                            <div class="qrcode me-3 position-relative" id="qrcode_image">
+                                <a t-att-href="o._get_portal_payment_link()" target="_blank" class="top-0 start-0 position-absolute w-100 h-100 z-1" />
+                                <p class="position-relative mb-0">
+                                            <img t-att-src="portal_qr_code"/>
+                                </p>
+                            </div>
+                            </t>
+
                         </td>
                         <td class="text-end"> المبلغ قبل الخصم</td>
                         <td><strong>Amount Before Discount</strong></td>
@@ -477,73 +497,75 @@
                         </tr>
                 </tbody>
             </table>
-            <table class="table table-sm table-bordered"
-                   style="width:100%; table-layout:fixed;
-                          page-break-inside: avoid;
-                          break-inside: avoid;
-                          border-collapse:collapse; font-size:10pt; margin-top:10px !important;margin-bottom:0px !important;">
-                <colgroup>
-                    <col style="width:25%;"/>
-                    <col style="width:25%;"/>
-                    <col style="width:25%;"/>
-                    <col style="width:25%;"/>
-                </colgroup>
-                <tbody>
-                    <tr>
-                        <td colspan="2"><p>Bank Details</p></td>
-                        <td><p>Prepared By</p></td>
-                        <td><p>Received By</p></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span>Account Name</span><br/>
-                            <span>إسم الحساب</span>
-                        </td>
-                        <td>Tricore Trading</td>
-                        <td rowspan="4" style="vertical-align:bottom;text-align:center;">
-                            <p>Sales Person: <span t-field="o.invoice_user_id"/></p>
-                            <span>توقيع مع ختم</span><br/>
-                            <span>Signature with Stamp</span>
-                        </td>
-                        <td rowspan="4" style="vertical-align:bottom;text-align:center">
-                            <span>توقيع مع ختم</span><br/>
-                            <span>Signature with Stamp</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span>Bank Name</span><br/>
-                            <span>اسم البنك</span>
-                        </td>
-                        <td><t t-if="o.partner_bank_id">
-                                <t t-out="o.partner_bank_id.bank_name or ''"/>
-                            </t>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span>Account No.</span><br/>
-                            <span>رقم الحساب</span>
-                        </td>
-                        <td>
-                            <t t-if="o.partner_bank_id">
-                                <t t-out="o.partner_bank_id.account_number or ''"/>
-                            </t>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <span>IBAN No.</span><br/>
-                            <span>رقم الآيبان</span>
-                        </td>
-                        <td>
-                            <t t-if="o.partner_bank_id">
-                                <t t-out="o.partner_bank_id.iban or ''"/>
-                            </t>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <t t-if="o.move_type=='out_invoice'">
+                <table class="table table-sm table-bordered"
+                       style="width:100%; table-layout:fixed;
+                              page-break-inside: avoid;
+                              break-inside: avoid;
+                              border-collapse:collapse; font-size:10pt; margin-top:10px !important;margin-bottom:0px !important;">
+                    <colgroup>
+                        <col style="width:25%;"/>
+                        <col style="width:25%;"/>
+                        <col style="width:25%;"/>
+                        <col style="width:25%;"/>
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <td colspan="2"><p>Bank Details</p></td>
+                            <td><p>Prepared By</p></td>
+                            <td><p>Received By</p></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span>Account Name</span><br/>
+                                <span>إسم الحساب</span>
+                            </td>
+                            <td>Tricore Trading</td>
+                            <td rowspan="4" style="vertical-align:bottom;text-align:center;">
+                                <p>Sales Person: <span t-field="o.invoice_user_id"/></p>
+                                <span>توقيع مع ختم</span><br/>
+                                <span>Signature with Stamp</span>
+                            </td>
+                            <td rowspan="4" style="vertical-align:bottom;text-align:center">
+                                <span>توقيع مع ختم</span><br/>
+                                <span>Signature with Stamp</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span>Bank Name</span><br/>
+                                <span>اسم البنك</span>
+                            </td>
+                            <td><t t-if="o.partner_bank_id">
+                                    <t t-out="o.partner_bank_id.bank_name or ''"/>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span>Account No.</span><br/>
+                                <span>رقم الحساب</span>
+                            </td>
+                            <td>
+                                <t t-if="o.partner_bank_id">
+                                    <t t-out="o.partner_bank_id.account_number or ''"/>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span>IBAN No.</span><br/>
+                                <span>رقم الآيبان</span>
+                            </td>
+                            <td>
+                                <t t-if="o.partner_bank_id">
+                                    <t t-out="o.partner_bank_id.iban or ''"/>
+                                </t>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </t>
         </xpath>
         <xpath expr="//div[@id='total']" position="replace">
             <div id="total" t-if="False"/>
