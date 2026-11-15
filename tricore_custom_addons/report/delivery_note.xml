@@ -87,7 +87,7 @@
                     <td style="border:1px solid black; padding:2px; vertical-align:top;">
                             <span>Project: <span t-field="o.sale_id.project_name"/> </span><br/>
                             <span>Currency: <span t-field="o.company_id.currency_id"/></span><br/>
-                            <span>Sales Person: <span t-field="o.sale_id.user_id.name"/> </span>
+                            <span>Sales Person: <span t-field="o.sale_id.salesman"/> </span>
                     </td>
                 </tr>
             </table>
