@@ -522,7 +522,10 @@
                             </td>
                             <td>Tricore Trading</td>
                             <td rowspan="4" style="vertical-align:bottom;text-align:center;">
-                                <p>Sales Person: <span t-field="o.invoice_user_id"/></p>
+                                <p>Sales Person:
+                                    <t t-if="sale_orders">
+                                        <t t-out="sale_orders[0].salesman"/>
+                                    </t></p>
                                 <span>توقيع مع ختم</span><br/>
                                 <span>Signature with Stamp</span>
                             </td>
