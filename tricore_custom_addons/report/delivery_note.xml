@@ -149,6 +149,10 @@
                 </tbody>
             </table>
         </xpath>
+        <xpath expr="//t[@t-set='backorders']" position="replace">
+            <t t-set="backorders"
+               t-value="false"/>
+        </xpath>
         <!--replaces the signature section-->
         <xpath expr="//div[@name='signature']"
            position="replace">
