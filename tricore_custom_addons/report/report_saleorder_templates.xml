@@ -71,10 +71,10 @@
                             </tr>
                             <tr>
                                 <td style="width:17%;">Kind Attn</td>
-                                <td style="width:33%;"><span t-field="doc.user_id"/>
+                                <td style="width:33%;"><span t-field="doc.attn"/>
                                 </td>
                                 <td style="width:17%;">Validity</td>
-                                <td style="width:33%;"><span t-field="doc.validity_date"/></td>
+                                <td style="width:33%;"><span t-field="doc.validity"/></td>
                             </tr>
                             <tr>
                                 <td style="width:17%;">TRN</td>
@@ -91,7 +91,7 @@
                                 </td>
                                 <td style="width:17%;">Delivery Terms</td>
                                 <td style="width:33%;">
-                                    <span t-field="doc.incoterm"/>
+                                    <span t-field="doc.incoterm.name"/>
                                 </td>
                             </tr>
                             <tr>
@@ -135,7 +135,7 @@
                             <span>#</span>
                             <t t-set="line_index" t-value="0"/>
                         </th>
-                        <th name="th_model_id" style="text-align: left; min-width: 150px !important;width: 150px !important; " class="text-start" aria-label="Model No">
+                        <th name="th_model_id" style="text-align: left; min-width: 100px !important;width: 120px !important; " class="text-start" aria-label="Model No">
                             <span>Code</span>
                         </th>
                         <th name="th_description" style="text-align: left; min-width: 30% !important; "  aria-label="Description">
@@ -164,6 +164,12 @@
             <td name="td_model" style="text-align:left">
                  <span t-field="line.product_id.default_code" class="text-nowrap"></span>
             </td>
+        </xpath>
+        <xpath expr="//td[@name='td_product_name']"
+               position="replace">
+             <td name="td_section_name" style="text-align:left;line-height: 1.5;">
+                <t t-out="line._compute_label_without_default_code()"/>
+             </td>
         </xpath>
         <xpath expr="//td[@name='td_product_priceunit']" position="before">
             <td name="td_remarks" style="text-align:left">
@@ -201,10 +207,9 @@
                         <!-- Payment Terms -->
                         <div style="border-top:1px solid black;
                                     padding:10px; min-height:100px;">
-                            <strong>Payment Term</strong>
-                            <div style="margin-left:30%; margin-top:3px;">
-                                <span t-field="doc.payment_term_id.name"/>
-                            </div>
+                           <span>
+                               <strong>Payment Terms: </strong> <span t-field="doc.payment_term_id.name"/>
+                           </span>
                         </div>
                     </td>
                     <td style="width:34%; vertical-align:top;

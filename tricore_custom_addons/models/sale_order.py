@@ -15,6 +15,8 @@ class SaleOrder(models.Model):
         compute='_compute_project_details',
         store=True
     )
+    validity = fields.Char("Validity")
+    attn = fields.Char("Attn")
 
     def _compute_project_details(self):
         project_plan = self.env['account.analytic.plan'].search(
@@ -83,4 +85,21 @@ class SaleOrder(models.Model):
 
 class SaleOrderLine(models.Model):
     _inherit = "sale.order.line"
+
+
     remarks = fields.Text()
+    label_new = fields.Char(
+        string='New Label',
+    )
+
+    def _compute_label_without_default_code(self):
+        print("computation")
+        for line in self:
+            label = line.label or ''
+            default_code = line.product_id.default_code
+            if default_code:
+                prefix = f'[{default_code}] '
+                if label.startswith(prefix):
+                    label = label[len(prefix):]
+            line.label_new = label
+            return label
