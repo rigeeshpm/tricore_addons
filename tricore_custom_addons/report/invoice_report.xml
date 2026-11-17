@@ -44,12 +44,33 @@
                         <thead>
                             <tr>
                                 <th colspan="4"
-                                    style="text-align:left; background:#eeeeee; padding:5px;">
-                                    <t t-if="o.move_type=='out_invoice'">
-                                        <h6><b>Tax Invoice : #</b><span t-out="o.name"/></h6>
+                                    style="text-align:left; background:#eeeeee; padding:5px;font-size:10pt;text-overflow:wrap">
+                                    <t t-if="o.move_type == 'out_invoice'">
+                                        <t name="invoice_title"><h6>Tax Invoice : #<span t-out="o.name"/></h6></t>
                                     </t>
-                                    <t t-if="o.move_type=='in_invoice'">
-                                        <h6><span t-out="o.name"/></h6>
+                                    <t t-elif="o.move_type == 'out_invoice' and o.state == 'cancel'">
+                                        <t name="cancelled_invoice_title"><h6>Cancelled Invoice #<span t-out="o.name"/></h6></t>
+                                    </t>
+                                     <t t-elif="o.move_type == 'out_refund' and o.state == 'posted'">
+                                         <t name="credit_note_title"><h6>Credit Note #<span t-out="o.name"/></h6></t>
+                                    </t>
+                                    <t t-elif="o.move_type == 'out_refund' and o.state == 'draft'">
+                                        <t name="draft_credit_note_title"><h6>Draft Credit Note #<span t-out="o.name"/></h6></t>
+                                    </t>
+                                    <t t-elif="o.move_type == 'out_refund' and o.state == 'cancel'">
+                                        <t name="cancelled_credit_note_title"><h6>Cancelled Credit Note #<span t-out="o.name"/></h6></t>
+                                    </t>
+                                    <t t-elif="o.move_type == 'in_refund' and not o.journal_id.is_self_billing">
+                                        <t name="vendor_credit_note_title"><h6>Vendor Credit Note #<span t-out="o.name"/></h6></t>
+                                    </t>
+                                    <t t-elif="o.move_type == 'in_refund' and o.journal_id.is_self_billing">
+                                        <t name="self_billing_credit_note_title"><h6>Self Billing Credit Note #<span t-out="o.name"/></h6></t>
+                                    </t>
+                                    <t t-elif="o.move_type == 'in_invoice' and not o.journal_id.is_self_billing">
+                                        <t name="vendor_bill_title"><h6>Vendor Bill: #<span t-out="o.name"/></h6></t>
+                                    </t>
+                                    <t t-elif="o.move_type == 'in_invoice' and o.journal_id.is_self_billing">
+                                        <t name="self_billing_invoice_title"><h6>Self Billing: #<span t-out="o.name"/></h6></t>
                                     </t>
                                 </th>
                                 <th colspan="4" style="text-align:left; background:#eeeeee; padding:5px;">
@@ -374,7 +395,7 @@
                 <t t-out="line_index"/>
             </td>
             <td name="product_name">
-             <span  t-field="line.product_id.name"/>
+                <span  t-field="line.product_id.name"/>
             </td>
         </xpath>
         <xpath expr="//th[@name='th_discount']" position="replace"/>

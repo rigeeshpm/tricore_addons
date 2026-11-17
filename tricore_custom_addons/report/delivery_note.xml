@@ -25,7 +25,42 @@
         <xpath expr="//div[@class='page']/h2" position="replace"/>
         <xpath expr="//t[@t-set='address']" position="replace"/>
         <xpath expr="//div[@id='informations']" position="replace">
-            <table style="width:100%;
+            <t t-if="o.picking_type_code == 'internal'">
+                 <h2 style="margin-top: 15px;">
+                        <span t-out="o._get_deliveryslip_report_title()"/>
+                        <span t-field="o.name">WH/OUT/0001</span>
+                    </h2>
+            </t>
+            <t t-if="o.picking_type_code == 'incoming'">
+                    <table style="width:100%;
+                              border-collapse:collapse;
+                              table-layout:fixed;
+                              margin-bottom:15px;
+                              font-size:11pt;">
+                    <tr>
+                        <td style="border:1px solid #000; padding:5px;">
+                                <strong>RECEIPT # <span t-field="o.name"/> </strong>
+                        </td>
+                        <td  style="border:1px solid black; padding:2px; vertical-align:top;"> <span> Order: <span t-field="o.origin" class="m-0">S0001</span></span></td>
+                        <td  style="border:1px solid black; padding:2px; vertical-align:top;"><strong>Date: <span t-field="o.scheduled_date" t-options='{"widget": "date"}'/> </strong></td>
+                    </tr>
+                </table>
+                <table>
+                    <tr>
+                         <td>
+                             <strong>From</strong>
+                             <div t-field="partner.commercial_partner_id"
+                                     t-options='{"widget": "contact", "fields": ["address", "name", "phone", "vat"], "no_marker": True, "phone_icons": True}'/>
+                         </td>
+                         <td>
+                              <strong>Warehouse Address</strong>
+                            <div t-field="o.picking_type_id.warehouse_id.partner_id"
+                                t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
+                         </td>
+                    </tr>
+                </table>
+            </t>
+            <table t-if="o.picking_type_code == 'outgoing'" style="width:100%;
                           border-collapse:collapse;
                           table-layout:fixed;
                           margin-bottom:15px;
@@ -38,12 +73,7 @@
                 <!-- FIRST ROW: All cells have borders -->
                 <tr>
                     <td style="border:1px solid #000; padding:5px;">
-                        <t t-if="o.picking_type_code == 'outgoing'">
                             <strong>DELIVERY NOTES</strong>
-                        </t>
-                         <t t-if="o.picking_type_code == 'incoming'">
-                            <strong>RECEIPT</strong>
-                        </t>
                     </td>
                     <td style="border:1px solid #000; padding:5px;">
                         <strong>Doc # <span t-field="o.name"/> </strong>
@@ -56,8 +86,9 @@
                     <td style="border:1px solid black; padding:2px; vertical-align:top;">
                                 <table class="table-borderless" style="width: 100%; border-collapse: collapse; border: none !important;">
                                     <tr style="border: none !important;">
-                                        <td style="border: none !important;width:60px;"> Bill To:  </td>
-                                        <td style="border: none !important;overflow-wrap:anywhere;"> <span t-field="o.partner_id"/> </td>
+                                        <td style="border: none !important;min-width:60px !important;"> Bill To:  </td>
+                                        <td style="border: none !important;white-space: normal;word-wrap: break-word;overflow-wrap: break-word;">
+                                            <span t-field="o.partner_id"/> </td>
                                     </tr>
                                     <tr style="border: none !important;">
                                         <td style="border: none !important;"></td>
@@ -79,7 +110,7 @@
                     </td>
                     <td style="border:1px solid black; padding:2px; vertical-align:top;">
                             <span>LPO No.: </span><span t-field="o.sale_id.client_order_ref"/> <br/>
-                            <span>Delivery Term:  </span><span t-field="o.sale_id.incoterm"/> <br/>
+                            <span>Delivery Term:  </span><span t-field="o.sale_id.incoterm.name"/> <br/>
                             <span>Place of Supply:
                                 <span t-field="o.partner_id.state_id.name"/>,
                                 <span t-field="o.partner_id.country_id.name"/></span><br/>
