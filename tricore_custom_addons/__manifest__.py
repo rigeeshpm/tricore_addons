@@ -3,7 +3,7 @@
     "version": "20.0.1.0.0",
     "category": "Accounting/Accounting",
     "summary": "",
-    "depends": ["account","sale","sale_stock","l10n_sa"],
+    "depends": ["account","sale","sale_stock","l10n_sa","payment_voucher_mixin"],
     "data": [ "report/templates.xml",
              "report/invoice_report.xml",
               "report/report_saleorder_templates.xml",
