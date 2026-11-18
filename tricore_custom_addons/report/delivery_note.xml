@@ -42,7 +42,7 @@
                                 <strong>RECEIPT # <span t-field="o.name"/> </strong>
                         </td>
                         <td  style="border:1px solid black; padding:2px; vertical-align:top;"> <span> Order: <span t-field="o.origin" class="m-0">S0001</span></span></td>
-                        <td  style="border:1px solid black; padding:2px; vertical-align:top;"><strong>Date: <span t-field="o.scheduled_date" t-options='{"widget": "date"}'/> </strong></td>
+                        <td  style="border:1px solid black; padding:2px; vertical-align:top;"><strong>Date: <span t-field="o.scheduled_date" t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/> </strong></td>
                     </tr>
                 </table>
                 <table>

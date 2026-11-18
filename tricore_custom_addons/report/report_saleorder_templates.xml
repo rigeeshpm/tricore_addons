@@ -33,7 +33,7 @@
                                     <h6><b>QUOTATION : #</b><span t-out="doc.name"/></h6>
                                 </td>
                                 <td colspan="2" style="text-align:left; background:#eeeeee; padding:5px;">
-                                    <h6>Date : <span t-out="doc.date_order" t-options='{"widget": "date"}'/></h6>
+                                    <h6>Date : <span t-out="doc.date_order" t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/></h6>
                                 </td>
                             </tr>
                             <tr>
@@ -82,7 +82,7 @@
                                 </td>
                                 <td style="width:17%;">ETA</td>
                                 <td style="width:33%;">
-                                    <span t-field="doc.expected_date" t-options='{"widget": "date"}'/>
+                                    <span t-field="doc.expected_date" t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/>
                                 </td>
                             </tr>
                             <tr>
