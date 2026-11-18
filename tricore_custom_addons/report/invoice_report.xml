@@ -93,7 +93,7 @@
                                 <th colspan="4"
                                     style="text-align:left; padding:5px;font-size:10pt;text-overflow:wrap">
                                      <t t-if="o.move_type=='in_invoice'">
-                                         <h6>Customer Reference: <span t-field="o.ref"/></h6>
+                                         <h6>Bill Reference: <span t-field="o.ref"/></h6>
                                     </t>
                                 </th>
                                 <th colspan="4"
