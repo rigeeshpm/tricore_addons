@@ -176,6 +176,12 @@
                 <span t-field="line.remarks" />
             </td>
         </xpath>
+        <xpath expr="//td[@name='td_product_subtotal']" position="replace">
+            <td name="td_remarks" class="text-end">
+                <span t-out="line.product_uom_qty*line.price_unit" />
+            </td>
+        </xpath>
+
         <!-- ..........sale order line table end................      -->
         <!-- Replace the standard quotation totals section -->
         <xpath expr="//div[@id='total']" position="replace">

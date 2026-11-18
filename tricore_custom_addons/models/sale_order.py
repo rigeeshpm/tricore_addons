@@ -1,4 +1,5 @@
 from odoo import api, fields, models
+from odoo.exceptions import ValidationError
 
 
 class SaleOrder(models.Model):
@@ -93,12 +94,11 @@ class SaleOrderLine(models.Model):
     )
 
     def _compute_label_without_default_code(self):
-        print("computation")
         for line in self:
             label = line.label or ''
             default_code = line.product_id.default_code
             if default_code:
-                prefix = f'[{default_code}] '
+                prefix = f'[{default_code}]'
                 if label.startswith(prefix):
                     label = label[len(prefix):]
             line.label_new = label

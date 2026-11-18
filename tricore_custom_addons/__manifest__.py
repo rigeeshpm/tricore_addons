@@ -12,6 +12,7 @@
               "views/res_partner_views.xml",
               "views/sale_order_views.xml",
               "views/stock_picking.xml",
+              "views/payment_voucher_mixin.xml",
               ],
     'assets': {
         'web.report_assets_common': [

@@ -6,15 +6,15 @@ class payment_voucher(models.Model):
 
     account_id = fields.Many2one(
         'account.account',
-        string="Account",
+        string="Account",context={'formatted_display_name': False},
         domain="[('account_type', '=', 'asset_cash')]"
     )
 
-# class MxVoucherLines(models.Model):
-#     _inherit = 'mx.payment.voucher.line'
+class MxVoucherLines(models.Model):
+    _inherit = 'mx.payment.voucher.line'
 
-    # account_id = fields.Many2one(
-    #     'account.account',
-    #     string="Account",
-    #     domain="[('account_type', '=', 'asset_cash')]"
-    # )
+    account_id = fields.Many2one(
+        'account.account',
+        string="Account",
+        context={'formatted_display_name': False},
+    )
