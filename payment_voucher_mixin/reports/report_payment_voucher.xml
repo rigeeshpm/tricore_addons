@@ -26,7 +26,7 @@
                                                     <span style="margin-left: 2px;" t-field="doc.account_id.name"/><br/>
                                                 </td>
                                                 <td style="width: 41%;border-right: 1px solid black">
-                                                    <span style="margin-left: 2px;"><b>Date: </b></span><span t-field="doc.voucher_date"/><br/>
+                                                    <span style="margin-left: 2px;"><b>Date: </b></span><span t-field="doc.voucher_date" t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/><br/>
                                                     <span style="margin-left: 2px;"><b>Narration: </b></span>
                                                     <span style="margin-left: 2px;" t-field="doc.narration"/><br/>
                                                 </td>

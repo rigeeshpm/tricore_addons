@@ -20,16 +20,16 @@ class ProductProduct(models.Model):
     def create(self, vals_list):
         vals_list_updated = []
         for vals in vals_list:
+            template_id = vals.get("product_tmpl_id", False)
+            template = self.env["product.template"].browse(template_id) if template_id else False
+            vals["default_code"] = template.default_code if (template and template.default_code) else "/"
             if "default_code" not in vals or vals["default_code"] == "/":
                 categ_id = vals.get("categ_id", False)
-                template_id = vals.get("product_tmpl_id", False)
                 category = self.env["product.category"]
                 if categ_id:
                     # Created as a product.product
                     category = category.browse(categ_id)
-                elif template_id:
-                    # Created from a product.template
-                    template = self.env["product.template"].browse(template_id)
+                elif template:
                     category = template.categ_id
                 sequence = self.env["ir.sequence"].get_category_sequence_id(category)
                 vals_list_updated.append(dict(vals, default_code=sequence.next_by_id()))
