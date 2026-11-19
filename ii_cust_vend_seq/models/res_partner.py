@@ -32,11 +32,11 @@ class ResPartner(models.Model):
                 vals["code"] = self.env["ir.sequence"].next_by_code(
                     "res.partner.vendor.sequence"
                 )
-            else:
-                vals["code"] = self.env["ir.sequence"].next_by_code(
-                    "res.partner.customer.sequence"
-                )
-                vals["customer_rank"] = 1
+            # else:
+            #     vals["code"] = self.env["ir.sequence"].next_by_code(
+            #         "res.partner.customer.sequence"
+            #     )
+            #     vals["customer_rank"] = 1
         return super().create(vals_list)
 
     @api.model
