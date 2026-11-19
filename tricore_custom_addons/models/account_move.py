@@ -28,3 +28,16 @@ class AccountMove(models.Model):
             ('plan_id', '=', region_plan.id)
         ], limit=1)
         return region_account.name if region_account else ""
+
+class AccountMoveLine(models.Model):
+    _inherit = "account.move.line"
+
+    def _compute_label_without_default_code(self):
+        for line in self:
+            label = line.label or ''
+            default_code = line.product_id.default_code
+            if default_code:
+                prefix = f'[{default_code}]'
+                if label.startswith(prefix):
+                    label = label[len(prefix):]
+            return label

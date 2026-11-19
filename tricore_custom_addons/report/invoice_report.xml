@@ -412,13 +412,19 @@
                 <span>Item</span>
             </th>
         </xpath>
+        <xpath expr="//td[@name='account_invoice_line_name']" position="replace">
+            <td class="w-100" name="account_invoice_line_name" t-att-style="padding_style">
+<!--               <span t-if="line.label" t-field="line.label" t-options="{'widget': 'text'}" class="d-inline-block w-100 lh-sm">Bacon Burger</span>-->
+                <span t-out="line._compute_label_without_default_code()"/>
+            </td>
+        </xpath>
         <xpath expr="//td[@name='account_invoice_line_name']" position="before">
             <td name="td_si_no" t-att-style="padding_style">
                 <t t-set="line_index" t-value="line_index+1"/>
                 <t t-out="line_index"/>
             </td>
             <td name="product_name">
-                <span  t-field="line.product_id.name"/>
+                <span  t-field="line.product_id.default_code"/>
             </td>
         </xpath>
         <xpath expr="//th[@name='th_discount']" position="replace"/>

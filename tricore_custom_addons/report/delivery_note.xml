@@ -110,7 +110,7 @@
                     </td>
                     <td style="border:1px solid black; padding:2px; vertical-align:top;">
                             <span>LPO No.: </span><span t-field="o.sale_id.client_order_ref"/> <br/>
-                            <span>Delivery Term:  </span><span t-field="o.sale_id.incoterm.name"/> <br/>
+                            <span>Delivery Term:  </span><span t-field="o.sale_id.incoterm.code"/> <br/>
                             <span>Place of Supply:
                                 <span t-field="o.partner_id.state_id.name"/>,
                                 <span t-field="o.partner_id.country_id.name"/></span><br/>

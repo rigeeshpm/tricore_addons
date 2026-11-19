@@ -91,7 +91,7 @@
                                 </td>
                                 <td style="width:17%;">Delivery Terms</td>
                                 <td style="width:33%;">
-                                    <span t-field="doc.incoterm.name"/>
+                                    <span t-field="doc.incoterm.code"/>
                                 </td>
                             </tr>
                             <tr>
