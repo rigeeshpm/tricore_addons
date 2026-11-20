@@ -111,9 +111,9 @@
                     <td style="border:1px solid black; padding:2px; vertical-align:top;">
                             <span>LPO No.: </span><span t-field="o.sale_id.client_order_ref"/> <br/>
                             <span>Delivery Term:  </span><span t-field="o.sale_id.incoterm.code"/> <br/>
-                            <span>Place of Supply:
-                                <span t-field="o.partner_id.state_id.name"/>,
-                                <span t-field="o.partner_id.country_id.name"/></span><br/>
+                            <span>Delivery Location:
+                                <span t-field="o.incoterm_location"/>
+                            </span><br/>
                     </td>
                     <td style="border:1px solid black; padding:2px; vertical-align:top;">
                             <span>Project: <span t-field="o.sale_id.project_name"/> </span><br/>
@@ -131,7 +131,7 @@
         <xpath expr="//table[@name='stock_move_line_table']" position="replace"/>
         <xpath expr="//table[@name='stock_move_table']" position="replace">
             <table class="table table-sm delivery-move-table"  name="stock_move_table">
-                <thead>
+                <thead style="display: table-header-group">
                     <tr>
                         <t t-set="line_index" t-value="0"/>
                         <th name="th_si_no"

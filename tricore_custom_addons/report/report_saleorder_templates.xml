@@ -82,11 +82,11 @@
                                 </td>
                                 <td style="width:17%;">ETA</td>
                                 <td style="width:33%;">
-                                    <span t-field="doc.expected_date" t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/>
+                                    <span t-field="doc.eta"/>
                                 </td>
                             </tr>
                             <tr>
-                                <td style="width:17%;">Project Location</td>
+                                <td style="width:17%;">Region</td>
                                 <td style="width:33%;"> <span t-field="doc.project_location"/>
                                 </td>
                                 <td style="width:17%;">Delivery Terms</td>
@@ -127,7 +127,7 @@
         <!--  replace table header      -->
         <xpath expr="//table[hasclass('o_main_table')]/thead"
                position="replace">
-                <thead style="display: table-row-group">
+                <thead style="display: table-header-group">
                     <tr>
                         <th name="th_si_no"
                             style="width: 5% !important; min-width: 5% !important; max-width: 5% !important; white-space: nowrap;"

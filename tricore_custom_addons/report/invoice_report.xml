@@ -24,8 +24,9 @@
             <attribute name="t-if">False</attribute>
         </xpath>
         <xpath expr="//div[@id='informations']" position="before">
-                 <t t-set="partner_ar" t-value="o.partner_id.with_context(lang='ar_001')"/>
+            <t t-set="partner_ar" t-value="o.partner_id.with_context(lang='ar_001')"/>
             <t t-set="partner_en" t-value="o.partner_id.with_context(lang='en_US')"/>
+            <t t-set="sale_orders" t-value="o.invoice_line_ids.sale_line_ids.order_id"/>
                 <t t-if="o and o._name == 'account.move'">
                     <table class="table table-sm table-bordered"
                            style="width:100%; max-width:100%; table-layout:fixed;margin-top:0px !important;margin-bottom:0px !important;
@@ -61,7 +62,7 @@
                                         <t name="cancelled_credit_note_title"><h6>Cancelled Credit Note #<span t-out="o.name"/></h6></t>
                                     </t>
                                     <t t-elif="o.move_type == 'in_refund' and not o.journal_id.is_self_billing">
-                                        <t name="vendor_credit_note_title"><h6>Vendor Credit Note #<span t-out="o.name"/></h6></t>
+                                        <t name="vendor_credit_note_title"><h6>Purchase Return #<span t-out="o.name"/></h6></t>
                                     </t>
                                     <t t-elif="o.move_type == 'in_refund' and o.journal_id.is_self_billing">
                                         <t name="self_billing_credit_note_title"><h6>Self Billing Credit Note #<span t-out="o.name"/></h6></t>
@@ -92,17 +93,25 @@
                             <tr t-if="o.move_type=='in_invoice'">
                                 <th colspan="4"
                                     style="text-align:left; padding:5px;font-size:10pt;text-overflow:wrap">
-                                     <t t-if="o.move_type=='in_invoice'">
                                          <h6>Bill Reference: <span t-field="o.ref"/></h6>
-                                    </t>
                                 </th>
                                 <th colspan="4"
                                     style="text-align:left; padding:5px;font-size:10pt;text-overflow:wrap">
-                                    <t t-if="o.move_type=='in_invoice'">
                                         <t t-set="purchase_orders"
            t-value="o.invoice_line_ids.mapped('purchase_line_id.order_id')"/>
                                         <h6>PO : <span t-out="', '.join(purchase_orders.mapped('name'))"/> </h6>
-                                    </t>
+                                </th>
+                            </tr>
+                            <tr t-if="o.move_type=='in_refund'">
+                                <th colspan="4"
+                                    style="text-align:left; padding:5px;font-size:10pt;text-overflow:wrap">
+                                         <t t-set="purchase_orders"
+           t-value="o.invoice_line_ids.mapped('purchase_line_id.order_id')"/>
+                                        <h6>PO : <span t-out="', '.join(purchase_orders.mapped('name'))"/> </h6>
+                                </th>
+                                <th colspan="4"
+                                    style="text-align:left; padding:5px;font-size:10pt;text-overflow:wrap">
+                                       <h6> Currency: <span t-field="o.company_id.currency_id"/></h6>
                                 </th>
                             </tr>
                         </thead>
@@ -267,11 +276,11 @@
                                    Region
                                 </td>
                                 <td style="padding:4px; overflow-wrap:anywhere;">
-                                    <t t-out="o.get_invoice_region()"/>
+                                    <t t-if="sale_orders" t-out="sale_orders[0].project_location"/>
                                 </td>
                                 <td style="padding:4px; direction:rtl;
                                            text-align:right; overflow-wrap:anywhere;">
-                                     <t t-out="o.get_invoice_region()"/>
+                                     <t t-if="sale_orders" t-out="sale_orders[0].project_location"/>
                                 </td>
                                 <td style="padding:4px; direction:rtl;
                                            text-align:right; overflow-wrap:anywhere;">
@@ -295,7 +304,6 @@
                 </t>
         </xpath>
         <xpath expr="//div[@id='informations']" position="after">
-            <t t-set="sale_orders" t-value="o.invoice_line_ids.sale_line_ids.order_id"/>
             <t t-set="pickings" t-value="sale_orders.picking_ids.filtered(lambda p: p.state == 'done')"/>
             <div class="row"
                  style="width:100%; margin:0; padding:0;">
@@ -399,6 +407,9 @@
                         width: 10% !important;
                     }
                 </style>
+        </xpath>
+        <xpath expr="//table[hasclass('o_main_table')]/thead" position="attributes">
+            <attribute name="style" add="display: table-header-group"/>
         </xpath>
         <xpath expr="//th[@name='th_description']" position="before">
             <th name="th_si_no" style="width: 5% !important; min-width: 5% !important; max-width: 5% !important; white-space: nowrap;"

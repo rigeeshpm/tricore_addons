@@ -16,6 +16,7 @@ class SaleOrder(models.Model):
     )
     validity = fields.Char("Validity")
     attn = fields.Char("Attn")
+    eta = fields.Char("Expected Time of Arrival")
 
     @api.depends('analytic_distribution')
     def _compute_analytic_details(self):
