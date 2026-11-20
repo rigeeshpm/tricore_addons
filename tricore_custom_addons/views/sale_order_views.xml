@@ -15,7 +15,6 @@
         </xpath>
         <xpath expr="/form//list[@name='sol_list']//field[@name='analytic_distribution']" position="after">
             <field name="remarks" optional="show"/>
-            <field name="discount_amount" optional="show"/>
           </xpath>
 
     </field>
