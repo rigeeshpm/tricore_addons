@@ -49,3 +49,15 @@ table.invoice-lines-cell-borders td {
     border: 1px solid #000;
     font-size:10pt;
 }
+
+.payment_voucher_lines {
+    border: none !important;
+    border-collapse: collapse !important;
+    border-spacing: 0 !important;
+}
+
+.payment_voucher_lines th,
+.payment_voucher_lines td {
+    border: 1px solid #000;
+    font-size:10pt;
+}

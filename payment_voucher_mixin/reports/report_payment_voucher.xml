@@ -9,11 +9,9 @@
                         <div class="clearfix invoice_main">
                             <div class="page mb-4">
                                 <div class="oe_structure"></div>
-                                        <div>
                                             <h3>
                                                 <center>PAYMENT VOUCHER</center>
                                             </h3>
-                                        </div>
                                        <table class="table table-sm table-bordered"
                                             style="width:100%; max-width:100%; table-layout:fixed;margin-top:0px !important;margin-bottom:0px !important;
                                                 border-collapse:collapse; margin:0 !important;

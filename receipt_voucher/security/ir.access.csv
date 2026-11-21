@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,operation
+access_mx_receipt_voucher_read,mx.receipt.voucher.read,model_mx_receipt_voucher,account.group_account_readonly,crud
+access_mx_receipt_voucher_line_read,mx.receipt.voucher.line.read,model_mx_receipt_voucher_line,account.group_account_readonly,crud

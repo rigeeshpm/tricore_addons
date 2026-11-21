@@ -31,21 +31,36 @@
                         <span t-field="o.name">WH/OUT/0001</span>
                     </h2>
             </t>
-            <t t-if="o.picking_type_code == 'incoming'">
-                    <table style="width:100%;
+            <!--            for receipt-->
+            <table style="width:100%;
                               border-collapse:collapse;
                               table-layout:fixed;
                               margin-bottom:15px;
-                              font-size:11pt;">
+                              font-size:11pt;" t-if="o.picking_type_code == 'incoming'">
                     <tr>
                         <td style="border:1px solid #000; padding:5px;">
                                 <strong>RECEIPT # <span t-field="o.name"/> </strong>
                         </td>
-                        <td  style="border:1px solid black; padding:2px; vertical-align:top;"> <span> Order: <span t-field="o.origin" class="m-0">S0001</span></span></td>
+                        <td  style="border:1px solid black; padding:2px; vertical-align:top;"> <strong> Order: <span t-field="o.origin" class="m-0">S0001</span></strong></td>
                         <td  style="border:1px solid black; padding:2px; vertical-align:top;"><strong>Date: <span t-field="o.scheduled_date" t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/> </strong></td>
                     </tr>
-                </table>
-                <table>
+            </table>
+            <!--            for receipt return-->
+            <table style="width:100%;
+                              border-collapse:collapse;
+                              table-layout:fixed;
+                              margin-bottom:15px;
+                              font-size:11pt;" t-if="o.picking_type_code == 'outgoing' and o.return_id">
+                    <tr>
+                        <td style="border:1px solid #000; padding:5px;">
+                                <strong>MRN Return # <span t-field="o.name"/> </strong>
+                        </td>
+                        <td  style="border:1px solid black; padding:2px; vertical-align:top;"> <strong> Order: <span t-field="o.return_id.origin" class="m-0">S0001</span></strong></td>
+                        <td  style="border:1px solid black; padding:2px; vertical-align:top;"><strong>Date: <span t-field="o.scheduled_date" t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/> </strong></td>
+                    </tr>
+            </table>
+            <!--            for receipt and receipt return-->
+            <table t-if="o.picking_type_code == 'incoming' or (o.picking_type_code == 'outgoing' and o.return_id)">
                     <tr>
                          <td>
                              <strong>From</strong>
@@ -58,9 +73,9 @@
                                 t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True, "phone_icons": True}'/>
                          </td>
                     </tr>
-                </table>
-            </t>
-            <table t-if="o.picking_type_code == 'outgoing'" style="width:100%;
+            </table>
+            <!--            for delivery note-->
+            <table t-if="o.picking_type_code == 'outgoing' and not o.return_id" style="width:100%;
                           border-collapse:collapse;
                           table-layout:fixed;
                           margin-bottom:15px;
@@ -127,8 +142,9 @@
                position="attributes">
             <attribute name="class" add="table table-sm delivery-move-table" separator=" "/>
         </xpath>
-        <!--        modifies the delivery lines table (stock.move)  for deliveries which are not confirmed-->
+        <!--remove the  delivery lines table (stock.move.line)-->
         <xpath expr="//table[@name='stock_move_line_table']" position="replace"/>
+        <!--replace the stock_move_table        -->
         <xpath expr="//table[@name='stock_move_table']" position="replace">
             <table class="table table-sm delivery-move-table"  name="stock_move_table">
                 <thead style="display: table-header-group">
@@ -180,6 +196,7 @@
                 </tbody>
             </table>
         </xpath>
+        <!--        remove backorder table-->
         <xpath expr="//t[@t-set='backorders']" position="replace">
             <t t-set="backorders"
                t-value="false"/>

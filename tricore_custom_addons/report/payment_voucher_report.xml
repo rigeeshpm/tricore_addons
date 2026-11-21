@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="report_mx_payment_voucher_pdf2"
+          inherit_id="payment_voucher_mixin.report_mx_payment_voucher_pdf2">
+        <xpath expr="//t[@t-call='web.external_layout']"
+               position="attributes">
+             <attribute name="t-call">tricore_custom_addons.custom_external_layout_header</attribute>
+        </xpath>
+        <xpath expr="//div[@class='page mb-4']" position="replace">
+            <div class="page mb-4">
+                <div class="oe_structure"></div>
+                <table class="table table-sm table-bordered"
+                       style="width:100%; max-width:100%; table-layout:fixed;margin-top:0px !important;margin-bottom:0px !important;
+                                                border-collapse:collapse; margin:0 !important;
+                                                padding:0 !important; font-size:10pt;text-overflow:wrap">
+                     <tr>
+                        <td style="width: 41%;border-right: 1px solid black">
+                                <span style="margin-left: 2px;"><b>Payment Voucher #:<span t-field="doc.name"/> </b></span>
+                        </td>
+                         <td style="width: 41%;border-right: 1px solid black">
+                             <span style="margin-left: 2px;"><b>Date: </b></span><span t-field="doc.voucher_date" t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/><br/>
+                         </td>
+
+                     </tr>
+                    <tr>
+                        <td> <span style="margin-left: 2px;"/><b>Account:</b> <span t-field="doc.account_id.name"/> </td>
+                        <td><span style="margin-left: 2px;"><b>Region: </b><span t-field="doc.project_location"/> </span></td>
+                    </tr>
+                    <tr>
+                        <td><span style="margin-left: 2px;"><b>Salesman: </b><span t-field="doc.salesman"/> </span></td>
+                        <td><span style="margin-left: 2px;"><b>Project: </b><span t-field="doc.project_name"/> </span></td>
+                    </tr>
+                </table>
+                <t t-set="lines" t-value="doc.voucher_line_ids.sorted(key=lambda l: (-l.id), reverse=True)"/>
+                <table style="width: 100%;margin-top:10px !important;font-size:10pt;" class="payment_voucher_lines" >
+                    <thead style="display: table-header-group">
+                        <tr style="">
+                            <th style="vertical-align: middle;" width="24%">Account Name</th>
+                            <th style="vertical-align: middle;" width="40%">Narration</th>
+                            <th style="vertical-align: middle;" width="9%">Total</th>
+                            <th style="vertical-align: middle;" width="12%">Tax Amt</th>
+                            <th style="vertical-align: middle;" width="15%">Total Amt</th>
+                        </tr>
+                    </thead>
+                    <t t-set="gross_amt" t-value="0"/>
+                    <t t-foreach="lines" t-as="line">
+                        <tr style="font-size: 14px">
+                            <td name="td_slno">
+                                <span style="margin-left: 2px;" t-field="line.account_id.name"/>
+                            </td>
+                            <td name="td_desc">
+                                <span style="margin-left: 2px;" t-field="line.narration"/>
+                            </td>
+                            <td name="td_qty">
+                                <span  style="margin-left: 2px;" t-field="line.tax.name"/>
+                            </td>
+                            <td name="td_uom" align="right">
+                                <span style="margin-right: 2px;" t-field="line.tax_amount"/>
+                            </td>
+                            <td name="td_rate" align="right">
+                                <span style="margin-right: 2px;" t-field="line.amount"/>
+                            </td>
+                        </tr>
+                    </t>
+                </table>
+                <table style="width: 100%;margin-top:10px !important;align:right;" class="payment_voucher_lines" >
+                    <tr>
+                        <td rowspan="6" style="width:70%">
+                            <span style="margin-right: 4px;">Total amount in words:</span>
+                            <br/>
+                            <span style="margin-right: 4px;" t-out="doc.currency_id.amount_to_text(doc.total)"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:20%">Total</td>
+                        <td align="right" style="width:20%">
+                            <span style="margin-right: 2px;" t-field="doc.untaxed_amount"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:20%">Tax</td>
+                        <td align="right" style="width:20%">
+                            <span style="margin-right: 2px;" t-field="doc.tax"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="width:20%">Total</td>
+                        <td style="width:20%" align="right">
+                            <span style="margin-right: 2px;" t-field="doc.total"/>
+                        </td>
+                    </tr>
+                </table>
+                 <div class="row">
+                    <div class="col-3" style="height:150px;border-bottom:1px solid black;">
+                        <div style="height:150px;padding-top:120px;">
+                            Prepared By
+                        </div>
+
+                    </div>
+                    <div class="col-6"></div>
+                    <div class="col-3" style="height:150px;border-bottom:1px solid black;">
+                        <div style="height:150px;padding-top:120px;">
+                        Approved By
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

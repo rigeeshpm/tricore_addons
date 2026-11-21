@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <template id="report_mx_receipt_voucher_pdf2">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.external_layout">
+                        <t t-set="company" t-value="user.company_id"/>
+                        <div class="page">
+                            <div class="clearfix invoice_main">
+                            <div class="page mb-4">
+                                <div class="oe_structure"></div>
+                                <h3>
+                                    <center>RECEIPT VOUCHER</center>
+                                </h3>
+                            </div>
+                            <table style="width: 100%;" class="table-borderless" name="quote_info">
+                                <tr style="border: 1px solid black;">
+                                    <td style="width: 41%;border-right: 1px solid black">
+                                        <span style="margin-left: 2px;"><b>Number:</b></span>
+                                        <span style="margin-left: 2px;" t-field="doc.name"/><br/>
+                                        <span style="margin-left: 2px;"><b>Account: </b></span>
+                                        <span style="margin-left: 2px;" t-field="doc.account_id.name"/><br/>
+                                    </td>
+                                    <td style="width: 41%;border-right: 1px solid black">
+                                        <span style="margin-left: 2px;"><b>Date: </b></span><span t-field="doc.voucher_date"/><br/>
+                                        <span style="margin-left: 2px;"><b>Narration: </b></span>
+                                        <span style="margin-left: 2px;" t-field="doc.narration"/><br/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                            <div class="row">
+                                <t t-set="lines"
+                                   t-value="doc.voucher_line_ids.sorted(key=lambda l: (-l.id), reverse=True)"/>
+                                <table style="width: 100%;">
+                                    <thead>
+                                        <tr style="background-color:rgb(217, 225, 242);height: 2em;">
+                                            <th style="vertical-align: middle;" width="24%">Account#</th>
+                                            <th style="vertical-align: middle;" width="40%">Narration</th>
+                                            <th style="vertical-align: middle;" width="9%">Tax</th>
+                                            <th style="vertical-align: middle;" width="12%">Tax Amt</th>
+                                            <th style="vertical-align: middle;" width="15%">Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <t t-set="gross_amt" t-value="0"/>
+                                    <t t-foreach="lines" t-as="line">
+                                        <tr style="font-size: 14px">
+                                            <td name="td_slno">
+                                                <span style="margin-left: 2px;" t-field="line.account_id.name"/>
+                                            </td>
+                                            <td name="td_desc">
+                                                <span style="margin-left: 2px;" t-field="line.narration"/>
+                                            </td>
+                                            <td name="td_tax" align="center">
+                                                <span  t-field="line.tax.name"/>
+                                            </td>
+                                            <td name="td_taxamt" align="right">
+                                                <span style="margin-right: 2px;" t-field="line.tax_amount"/>
+                                            </td>
+                                            <td name="td_ammount" align="right">
+                                                <span style="margin-right: 2px;" t-field="line.amount"/>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </table>
+                            </div>
+                                <table align="right" style="width: 100%;background-color:rgb(217, 225, 242)">
+                                    <tr>
+                                        <td rowspan="6" style="width:70%">
+                                            <span style="margin-right: 4px;" t-esc="'Total amount in words: '"/>
+                                            <br/>
+                                            <span style="margin-right: 4px;" t-esc="doc.currency_id.amount_to_text(doc.total)"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:20%">Total</td>
+                                        <td align="right" style="width:20%">
+                                            <span style="margin-right: 2px;" t-field="doc.untaxed_amount"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:20%">Vat 15%</td>
+                                        <td align="right" style="width:20%">
+                                            <span style="margin-right: 2px;" t-field="doc.tax"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:20%">Total</td>
+                                        <td style="width:20%" align="right">
+                                            <span style="margin-right: 2px;" t-field="doc.total"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            <div class="footer o_standard_footer" style="page-break-after: avoid;">
+                            <div>
+                                <table class="table-borderless" style="width:100%;" name="print_info">
+                                    <tr style="color:rgb(191, 191, 191);">
+                                        <td style="text-align:left;width:50%;">
+                                            <span>Printed at</span>
+                                            <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%d/%m/%Y - %I:%M %p')"/>
+                                        </td>
+                                        <td style="text-align:right;width:50%">
+                                            <span>Page</span>
+                                            <span class="page"/>
+                                            of
+                                            <span class="topage"/>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+        <record id="paperformat_compact_header_pv" model="report.paperformat">
+            <field name="name">Compact Header for Receipt voucher</field>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">40</field>
+            <field name="margin_bottom">15</field>
+            <field name="margin_left">10</field>
+            <field name="margin_right">10</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">40</field>
+            <field name="dpi">90</field>
+    </record>
+        <record id="report_mx_receipt_voucher_pdf" model="ir.actions.report">
+            <field name="name">Print</field>
+            <field name="model">mx.receipt.voucher</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">receipt_voucher.report_mx_receipt_voucher_pdf2</field>
+            <field name="print_report_name">('Receipt Voucher - %s' % (object.name))</field>
+            <field name="binding_model_id" ref="receipt_voucher.model_mx_receipt_voucher"/>
+            <field name="binding_type">report</field>
+            <field name="paperformat_id" ref="paperformat_compact_header_pv"/>
+        </record>
+    </data>
+</odoo>

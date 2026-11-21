@@ -1,5 +1,5 @@
 {
-    "name": "Payment Voucher Tricore",
+    "name": "Payment Voucher",
     "version": "20.0.1.0.0",
     "category": "Accounting/Accounting",
     "summary": "",
