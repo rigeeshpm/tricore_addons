@@ -535,7 +535,7 @@
                     </tr>
                     <tr>
                         <td class="text-end"> تخفيض</td>
-                       <td>Discount </td>
+                        <td><strong>Discount </strong></td>
                         <td class="text-end">
                             <t t-out="total_discount"
                                   t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
@@ -543,23 +543,25 @@
                     </tr>
                      <tr>
                          <td class="text-end"> المبلغ باستثناء ضريبة</td>
-                       <td>Total(Excl VAT) </td>
+                         <td><strong>Total(Excl VAT) </strong></td>
                         <td class="text-end"><span t-field="o.amount_untaxed" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
                     </tr>
                     <tr>
                         <td class="text-end">ضريبة القيمة</td>
-                        <td>VAT Amount 15% (SAR)</td>
+                        <td><strong>VAT Amount 15% (SAR)</strong></td>
                         <td class="text-end"><span t-field="o.amount_tax" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
                     </tr>
                     <tr>
                         <td class="text-end">الإجمالي شاملاً ضريبة </td>
-                        <td>Total(Incl VAT)</td>
+                        <td><strong>Total(Incl VAT)</strong></td>
                         <td class="text-end"><span t-field="o.amount_total"
       t-options='{"widget": "monetary", "display_currency": o.currency_id}'/></td>
                     </tr>
                     <tr>
                         <td colspan="3">
-                           Total in words: SAR <span t-field="o.amount_total_words">Thirty one dollar and Five cents</span></td>
+                            <strong>Total in words: <span t-out="o.currency_id.amount_to_text(o.amount_total).title()"/></strong>
+<!--                            <span t-field="o.amount_total_words">Thirty one dollar and Five cents</span>-->
+                        </td>
                         </tr>
                 </tbody>
             </table>

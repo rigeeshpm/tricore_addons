@@ -89,9 +89,9 @@
                                 <td style="width:17%;">Region</td>
                                 <td style="width:33%;"> <span t-field="doc.project_location"/>
                                 </td>
-                                <td style="width:17%;">Delivery Term&amp; Location</td>
+                                <td style="width:17%;">Delivery Term &amp; Location</td>
                                 <td style="width:33%;">
-                                    <span t-field="doc.incoterm.code"/>/ 
+                                    <span t-field="doc.incoterm.code"/>/
                                     <span t-field="doc.incoterm_location"/>
                                 </td>
                             </tr>
@@ -202,7 +202,7 @@
                             <strong>Total Amount In Words :</strong>
                             <div style="margin-left:30%; margin-top:3px;
                                         font-weight:bold;">
-                                <span t-out="doc.currency_id.amount_to_text(doc.amount_total)"/>
+                                <span t-out="doc.currency_id.amount_to_text(doc.amount_total).title()"/>
                             </div>
                             <div style="margin-top:15px;">
                                 <strong>Noted/Remarks :-</strong>

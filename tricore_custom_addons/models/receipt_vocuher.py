@@ -6,8 +6,7 @@ class MxReceiptVoucher(models.Model):
 
     account_id = fields.Many2one(
         'account.account',
-        string="Account",context={'formatted_display_name': False},
-        domain="[('account_type', '=', 'asset_cash')]"
+        string="Account",context={'formatted_display_name': False}
     )
     project_name = fields.Char(
         string='Project Name',

@@ -16,7 +16,17 @@ class SaleOrder(models.Model):
     )
     validity = fields.Char("Validity")
     attn = fields.Char("Attn")
-    eta = fields.Char("Expected Time of Arrival")
+    eta = fields.Char("ETA")
+    partner_id = fields.Many2one(
+        comodel_name="res.partner",
+        string="Customer",
+        required=True,
+        change_default=True,
+        index=True,
+        tracking=1,
+        check_company=True,
+        domain="[('customer_rank','>',0)]"
+    )
 
     @api.depends('analytic_distribution')
     def _compute_analytic_details(self):

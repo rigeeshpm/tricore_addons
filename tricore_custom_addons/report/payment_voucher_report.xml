@@ -68,7 +68,7 @@
                         <td rowspan="6" style="width:70%">
                             <span style="margin-right: 4px;">Total amount in words:</span>
                             <br/>
-                            <span style="margin-right: 4px;" t-out="doc.currency_id.amount_to_text(doc.total)"/>
+                            <span style="margin-right: 4px;" t-out="doc.currency_id.amount_to_text(doc.total).title()"/>
                         </td>
                     </tr>
                     <tr>
