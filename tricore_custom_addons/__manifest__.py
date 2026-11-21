@@ -3,7 +3,8 @@
     "version": "20.0.1.0.0",
     "category": "Accounting/Accounting",
     "summary": "",
-    "depends": ["account","sale","sale_stock","l10n_sa","payment_voucher_mixin","sale_analytic","purchase_analytic"],
+    "depends": ["account","sale","sale_stock","l10n_sa","payment_voucher_mixin",
+                "receipt_voucher","sale_analytic","purchase_analytic"],
     "data": [
               "report/templates.xml",
               "report/delivery_note.xml",
