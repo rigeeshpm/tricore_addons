@@ -38,7 +38,7 @@ class SaleOrder(models.Model):
         all_account_ids = set()
         order_account_ids = {}
         for order in self:
-            if (not order.analytic_distribution) and order.order_line.analytic_distribution:
+            if (not order.analytic_distribution) and order.order_line.mapped('analytic_distribution'):
                 order._compute_analytic_distribution()
             account_ids = set()
             if order.analytic_distribution:
