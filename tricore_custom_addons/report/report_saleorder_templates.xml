@@ -89,9 +89,10 @@
                                 <td style="width:17%;">Region</td>
                                 <td style="width:33%;"> <span t-field="doc.project_location"/>
                                 </td>
-                                <td style="width:17%;">Delivery Terms</td>
+                                <td style="width:17%;">Delivery Term&amp; Location</td>
                                 <td style="width:33%;">
-                                    <span t-field="doc.incoterm.code"/>
+                                    <span t-field="doc.incoterm.code"/>/ 
+                                    <span t-field="doc.incoterm_location"/>
                                 </td>
                             </tr>
                             <tr>
