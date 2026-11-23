@@ -20,13 +20,14 @@ class MxPaymentVoucher(models.Model):
 
     @api.depends('voucher_line_ids.analytic_distribution')
     def _compute_analytic_details(self):
-        # Fetch the three analytic plans
+        # Fetch analytic plans
         plans = self.env['account.analytic.plan'].search([
             '|', '|',
             ('name', '=ilike', 'Project'),
             ('name', '=ilike', 'Salesman'),
             ('name', '=ilike', 'Region'),
         ])
+
         plans_dict = {
             plan.name.lower(): plan.id
             for plan in plans
@@ -34,50 +35,74 @@ class MxPaymentVoucher(models.Model):
         project_plan_id = plans_dict.get('project')
         salesman_plan_id = plans_dict.get('salesman')
         region_plan_id = plans_dict.get('region')
-        # Collect all analytic account IDs from all orders
+
+        # Collect analytic account IDs from all voucher lines
         all_account_ids = set()
         payment_account_ids = {}
+
         for payment in self:
             account_ids = set()
-            analytic_distribution = payment.voucher_line_ids.analytic_distribution
-            if analytic_distribution:
-                for key in analytic_distribution.keys():
+
+            for line in payment.voucher_line_ids:
+                distribution = line.analytic_distribution or {}
+
+                for key in distribution.keys():
                     for acc_id in key.split(','):
                         acc_id = acc_id.strip()
+
                         if acc_id.isdigit():
                             account_ids.add(int(acc_id))
+
             payment_account_ids[payment.id] = account_ids
             all_account_ids.update(account_ids)
+
         # Fetch all relevant analytic accounts in one query
+        plan_ids = [
+            plan_id for plan_id in [
+                project_plan_id,
+                salesman_plan_id,
+                region_plan_id
+            ] if plan_id
+        ]
+
         accounts = self.env['account.analytic.account'].search([
             ('id', 'in', list(all_account_ids)),
-            ('plan_id', 'in', [
-                plan_id for plan_id in [
-                    project_plan_id,
-                    salesman_plan_id,
-                    region_plan_id
-                ] if plan_id
-            ])
-        ]) if all_account_ids else self.env['account.analytic.account']
-        # Compute the three fields
-        for order in self:
+            ('plan_id', 'in', plan_ids)
+        ]) if all_account_ids and plan_ids else self.env['account.analytic.account']
+
+        accounts_dict = {
+            account.id: account
+            for account in accounts
+        }
+
+        # Compute fields for each voucher
+        for payment in self:
+
             project_names = set()
             salesman_names = set()
             project_locations = set()
-            order_ids = payment_account_ids.get(order.id, set())
-            for account in accounts:
-                if account.id not in order_ids:
+
+            account_ids = payment_account_ids.get(payment.id, set())
+
+            for account_id in account_ids:
+
+                account = accounts_dict.get(account_id)
+
+                if not account:
                     continue
+
                 if account.plan_id.id == project_plan_id:
                     project_names.add(account.name)
+
                 elif account.plan_id.id == salesman_plan_id:
                     salesman_names.add(account.name)
+
                 elif account.plan_id.id == region_plan_id:
                     project_locations.add(account.name)
+
             payment.project_name = ', '.join(sorted(project_names))
             payment.salesman = ', '.join(sorted(salesman_names))
             payment.project_location = ', '.join(sorted(project_locations))
-
 
 class MxVoucherLines(models.Model):
     _inherit = 'mx.payment.voucher.line'
