@@ -148,6 +148,12 @@ class MxReceiptVoucherLines(models.Model):
 	amount = fields.Float()
 	analytic_id = fields.Many2one('account.analytic.account')
 	narration = fields.Char('Narration')
+	currency_id = fields.Many2one('res.currency',related='voucher_id.currency_id')
+	gross_total = fields.Monetary(compute='_compute_gross_total')
+
+	def _compute_gross_total(self):
+		for record in self:
+			record.gross_total = record.amount + record.tax_amount
 
 	@api.depends('amount','tax')
 	def _get_tax_amount(self):
@@ -156,3 +162,4 @@ class MxReceiptVoucherLines(models.Model):
 			record.tax_amount = 0.0
 			if record.tax  and record.amount:
 				record.tax_amount = (record.tax.amount/100)*record.amount
+

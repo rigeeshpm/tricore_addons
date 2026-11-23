@@ -24,6 +24,7 @@ class MxPaymentVoucher(models.Model):
 	tax = fields.Monetary(compute='_get_voucher_amount_details')
 	total = fields.Monetary(compute='_get_voucher_amount_details')
 	journal_entry_id = fields.Many2one('account.move')
+
 	narration = fields.Char('Narration')
 
 
@@ -150,6 +151,12 @@ class MxVoucherLines(models.Model):
 	amount = fields.Float()
 	analytic_id = fields.Many2one('account.analytic.account')
 	narration = fields.Char('Narration')
+	currency_id = fields.Many2one('res.currency', related='voucher_id.currency_id')
+	gross_total = fields.Monetary(compute='_compute_gross_total')
+
+	def _compute_gross_total(self):
+		for record in self:
+			record.gross_total = record.amount+record.tax_amount
 
 	@api.depends('amount','tax')
 	def _get_tax_amount(self):

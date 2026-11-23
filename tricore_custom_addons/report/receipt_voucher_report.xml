@@ -51,13 +51,13 @@
                                 <span style="margin-left: 2px;" t-field="line.narration"/>
                             </td>
                             <td name="td_qty">
-                                <span  style="margin-left: 2px;" t-field="line.tax.name"/>
+                                <span  style="margin-left: 2px;" t-field="line.amount"/>
                             </td>
                             <td name="td_uom" align="right">
                                 <span style="margin-right: 2px;" t-field="line.tax_amount"/>
                             </td>
                             <td name="td_rate" align="right">
-                                <span style="margin-right: 2px;" t-field="line.amount"/>
+                                <span style="margin-right: 2px;" t-field="line.gross_total"/>
                             </td>
                         </tr>
                     </t>
