@@ -111,7 +111,7 @@
                                 </th>
                                 <th colspan="4"
                                     style="text-align:left; padding:5px;font-size:10pt;text-overflow:wrap">
-                                       <h6> Currency: <span t-field="o.company_id.currency_id"/></h6>
+                                       <h6> Currency: <span t-field="o.currency_id"/></h6>
                                 </th>
                             </tr>
                         </thead>

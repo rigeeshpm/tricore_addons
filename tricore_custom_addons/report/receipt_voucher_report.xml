@@ -50,8 +50,8 @@
                             <td name="td_desc">
                                 <span style="margin-left: 2px;" t-field="line.narration"/>
                             </td>
-                            <td name="td_qty">
-                                <span  style="margin-left: 2px;" t-field="line.amount"/>
+                            <td name="td_qty" align="right">
+                                <span  style="margin-right: 2px;" t-field="line.amount"/>
                             </td>
                             <td name="td_uom" align="right">
                                 <span style="margin-right: 2px;" t-field="line.tax_amount"/>
